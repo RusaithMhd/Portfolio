@@ -6,6 +6,20 @@ import MagneticButton from "./MagneticButton";
 const MediaModal = ({ isOpen, onClose, asset, allAssets, onSelectAsset }) => {
   if (!asset) return null;
 
+  const handleAction = (link) => {
+    if (link.startsWith("#")) {
+      onClose();
+      setTimeout(() => {
+        const element = document.getElementById(link.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 300);
+      return;
+    }
+    window.open(link, "_blank");
+  };
+
   const modalContent = (
     <AnimatePresence mode="wait">
       {isOpen && (
@@ -58,20 +72,44 @@ const MediaModal = ({ isOpen, onClose, asset, allAssets, onSelectAsset }) => {
                 Full metadata encryption active. Internal size verified at {asset.size}.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 relative z-10 w-full sm:w-auto">
-                <MagneticButton 
-                  onClick={() => window.open(asset.link, "_blank")}
-                  className="!px-6 md:!px-10 !py-3 md:!py-4 border-white/10 hover:bg-white/5 uppercase tracking-widest text-[10px] md:text-[11px] font-black w-full sm:w-auto"
-                >
-                  View Live
-                </MagneticButton>
-                {asset.canDownload && (
-                  <MagneticButton 
-                    onClick={() => window.open(asset.link, "_blank")}
-                    className="!px-6 md:!px-10 !py-3 md:!py-4 bg-accent-cyan text-black border-none uppercase tracking-widest text-[10px] md:text-[11px] font-black hover:shadow-neon-cyan w-full sm:w-auto"
-                  >
-                    Fetch Source
-                  </MagneticButton>
+              <div className="flex flex-col gap-4 relative z-10 w-full max-w-sm mx-auto">
+                {asset.versions ? (
+                  asset.versions.map((version, i) => (
+                    <div key={i} className="flex flex-col gap-2 p-4 glass-morphism border-white/5 bg-white/[0.02] rounded-2xl group/version">
+                      <span className="text-[9px] text-accent-cyan font-black uppercase tracking-[3px] text-left ml-2 mb-1">{version.label}</span>
+                      <div className="flex gap-2">
+                        <MagneticButton 
+                          onClick={() => handleAction(version.link)}
+                          className="flex-1 !py-3 border-white/10 hover:bg-white/5 uppercase tracking-widest text-[9px] font-black"
+                        >
+                          View
+                        </MagneticButton>
+                        <MagneticButton 
+                          onClick={() => handleAction(version.link)}
+                          className="flex-1 !py-3 bg-accent-cyan text-black border-none uppercase tracking-widest text-[9px] font-black hover:shadow-neon-cyan"
+                        >
+                          Fetch
+                        </MagneticButton>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto justify-center">
+                    <MagneticButton 
+                      onClick={() => handleAction(asset.link)}
+                      className="!px-6 md:!px-10 !py-3 md:!py-4 border-white/10 hover:bg-white/5 uppercase tracking-widest text-[10px] md:text-[11px] font-black w-full sm:w-auto"
+                    >
+                      {asset.link.startsWith("#") ? "Initialize Protocol" : "View Live"}
+                    </MagneticButton>
+                    {asset.canDownload && (
+                      <MagneticButton 
+                        onClick={() => handleAction(asset.link)}
+                        className="!px-6 md:!px-10 !py-3 md:!py-4 bg-accent-cyan text-black border-none uppercase tracking-widest text-[10px] md:text-[11px] font-black hover:shadow-neon-cyan w-full sm:w-auto"
+                      >
+                        Fetch Source
+                      </MagneticButton>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

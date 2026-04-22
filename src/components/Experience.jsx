@@ -109,10 +109,10 @@ const ExperienceCard = ({ experience, index }) => {
             </div>
           </div>
 
-          <div className="flex flex-col md:items-end">
+          <div className="flex flex-col md:items-end flex-shrink-0">
             <div className="flex items-center gap-2 text-accent-cyan mb-2">
               <FiClock className="text-sm" />
-              <span className="text-[12px] font-black uppercase tracking-[3px] bg-white/5 px-3 py-1 rounded-sm border border-white/5">
+              <span className="text-[12px] font-black uppercase tracking-[3px] bg-white/5 px-3 py-1 rounded-sm border border-white/5 whitespace-nowrap">
                 {experience.date}
               </span>
             </div>

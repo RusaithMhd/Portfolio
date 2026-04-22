@@ -16,7 +16,8 @@ import {
   FiDownload,
   FiEye,
   FiBox,
-  FiExternalLink
+  FiExternalLink,
+  FiZap
 } from "react-icons/fi";
 
 const assets = [
@@ -27,7 +28,11 @@ const assets = [
     type: "PDF",
     class: "LEAD",
     canDownload: true,
-    link: publicUrls.resume
+    link: publicUrls.resume,
+    versions: [
+      { label: "Official Version", link: publicUrls.resume },
+      { label: "ATS Optimized", link: publicUrls.atsResume }
+    ]
   },
   {
     name: "Project Portfolio",
@@ -36,7 +41,7 @@ const assets = [
     type: "PDF",
     class: "CORE",
     canDownload: true,
-    link: publicUrls.resume 
+    link: "#projects"
   },
   {
     name: "My Works Archive",
@@ -54,7 +59,7 @@ const assets = [
     type: "ZIP",
     class: "ASSET",
     canDownload: true,
-    link: "https://github.com/RusaithMhd"
+    link: "#projects"
   },
   {
     name: "Creative Proposal",
@@ -63,7 +68,7 @@ const assets = [
     type: "PPTX",
     class: "STRATEGIC",
     canDownload: false,
-    link: "#contact"
+    link: "#projects"
   },
 ];
 
@@ -72,19 +77,15 @@ const MediaKit = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleView = (asset) => {
-    if (asset.link.startsWith("#")) {
-      const element = document.getElementById(asset.link.substring(1));
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-      return;
-    }
     setSelectedAsset(asset);
     setIsModalOpen(true);
   };
 
   const handleDownload = (asset) => {
-    if (asset.link === "#") return;
+    if (asset.link === "#" || asset.link.startsWith("#")) {
+      handleView(asset);
+      return;
+    }
     window.open(asset.link, "_blank");
   };
 
@@ -121,98 +122,104 @@ const MediaKit = () => {
       </div>
 
       <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {assets.map((asset, index) => (
-          <motion.div
-            key={asset.name}
-            variants={fadeIn("up", "spring", index * 0.1, 0.75)}
-            className="group relative flex flex-col justify-between h-full cursor-pointer perspective-1000"
-            onClick={() => handleView(asset)}
-          >
-            {/* Corner Brackets */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
+        {assets.map((asset, index) => {
+          const isNavLink = asset.link.startsWith("#");
+          return (
+            <motion.div
+              key={asset.name}
+              variants={fadeIn("up", "spring", index * 0.1, 0.75)}
+              className="group relative flex flex-col justify-between h-full cursor-pointer perspective-1000"
+              onClick={() => handleView(asset)}
+            >
+              {/* Corner Brackets */}
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-accent-cyan/20 group-hover:border-accent-cyan transition-colors z-20" />
 
-            <div className="glass-card p-6 lg:p-10 rounded-sm flex flex-col justify-between h-full bg-black/60 border border-white/5 group-hover:border-accent-cyan/30 transition-all duration-500 overflow-hidden relative">
-              {/* Noise Texture Overlay */}
-              <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity pointer-events-none mix-blend-overlay bg-black/5" />
-              
-              {/* Technical Data Background Labels */}
-              <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-between pointer-events-none opacity-[0.02] group-hover:opacity-[0.05] transition-opacity font-mono text-[8px] text-white">
-                <div className="flex justify-between">
-                  <span>DATA_CLUSTER_0{index + 1}</span>
-                  <span>SYS_ID: 0x{index}FF</span>
-                </div>
-                <div className="flex justify-between items-end">
-                  <span>SEC_LVL: A</span>
-                  <div className="flex flex-col items-end">
-                    <span>BIT_RATE: 2048</span>
-                    <span>UPLINK: ACTIVE</span>
+              <div className="glass-card p-6 lg:p-10 rounded-sm flex flex-col justify-between h-full bg-black/60 border border-white/5 group-hover:border-accent-cyan/30 transition-all duration-500 overflow-hidden relative">
+                {/* Noise Texture Overlay */}
+                <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity pointer-events-none mix-blend-overlay bg-black/5" />
+
+                {/* Technical Data Background Labels */}
+                <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-between pointer-events-none opacity-[0.02] group-hover:opacity-[0.05] transition-opacity font-mono text-[8px] text-white">
+                  <div className="flex justify-between">
+                    <span>DATA_CLUSTER_0{index + 1}</span>
+                    <span>SYS_ID: 0x{index}FF</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Asset Pattern Decor */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] group-hover:opacity-[0.04] transition-opacity pointer-events-none">
-                <div className="text-[10rem] lg:text-[12rem] rotate-12">{asset.icon}</div>
-              </div>
-
-              <div className="relative z-10">
-                <div className="flex items-start justify-between mb-6 lg:mb-10">
-                  <div className="relative">
-                    <div className="absolute -inset-4 bg-accent-cyan/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl bg-white/5 flex items-center justify-center text-2xl lg:text-3xl text-white/20 group-hover:text-accent-cyan group-hover:bg-accent-cyan/5 border border-white/10 group-hover:border-accent-cyan/40 transition-all duration-500 relative">
-                      {asset.icon}
+                  <div className="flex justify-between items-end">
+                    <span>SEC_LVL: A</span>
+                    <div className="flex flex-col items-end">
+                      <span>BIT_RATE: 2048</span>
+                      <span>UPLINK: ACTIVE</span>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className={`text-[8px] font-black uppercase tracking-[3px] px-3 py-1 rounded-full border shadow-neon-cyan/20 ${
-                      asset.class === 'LEAD' ? 'text-accent-cyan border-accent-cyan/30 bg-accent-cyan/10' : 'text-white/40 border-white/10 bg-white/5'
-                    }`}>
-                      {asset.class}
-                    </span>
-                    <span className="text-[8px] text-white/10 font-mono mt-3 tracking-widest uppercase italic">
-                      SEC_ID_0{index}
-                    </span>
-                  </div>
                 </div>
 
-                <h3 className="text-white text-xl lg:text-3xl font-black uppercase tracking-tighter mb-2 lg:mb-4 group-hover:text-accent-cyan transition-colors">
-                  {asset.name}
-                </h3>
-                <p className="text-secondary text-[8px] lg:text-[10px] mb-6 lg:mb-8 opacity-40 group-hover:opacity-80 transition-opacity uppercase tracking-[4px] font-black">
-                  SIZE_{asset.size} // TYPE_{asset.type}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-4 pt-8 border-t border-white/5 relative z-10">
-                <div className="flex items-center justify-between group/btn cursor-pointer" onClick={(e) => { e.stopPropagation(); handleView(asset); }}>
-                  <span className="text-[10px] text-white/40 font-black uppercase tracking-[3px] group-hover/btn:text-white transition-colors">Tactical_Scan</span>
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover/btn:border-accent-cyan/40 transition-all">
-                    <FiEye className="text-white/20 group-hover/btn:text-accent-cyan transition-colors" />
-                  </div>
+                {/* Asset Pattern Decor */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] group-hover:opacity-[0.04] transition-opacity pointer-events-none">
+                  <div className="text-[10rem] lg:text-[12rem] rotate-12">{asset.icon}</div>
                 </div>
-                
-                {asset.canDownload && (
-                  <div className="flex items-center justify-between group/btn cursor-pointer" onClick={(e) => { e.stopPropagation(); handleDownload(asset); }}>
-                    <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[4px]">Retrieve_Asset</span>
-                    <div className="w-8 h-8 rounded-full bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/20 group-hover/btn:border-accent-cyan/60 transition-all">
-                      <FiDownload className="text-accent-cyan group-hover/btn:scale-110 transition-transform" />
+
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-6 lg:mb-10">
+                    <div className="relative">
+                      <div className="absolute -inset-4 bg-accent-cyan/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl bg-white/5 flex items-center justify-center text-2xl lg:text-3xl text-white/20 group-hover:text-accent-cyan group-hover:bg-accent-cyan/5 border border-white/10 group-hover:border-accent-cyan/40 transition-all duration-500 relative">
+                        {asset.icon}
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className={`text-[8px] font-black uppercase tracking-[3px] px-3 py-1 rounded-full border shadow-neon-cyan/20 ${asset.class === 'LEAD' ? 'text-accent-cyan border-accent-cyan/30 bg-accent-cyan/10' : 'text-white/40 border-white/10 bg-white/5'
+                        }`}>
+                        {asset.class}
+                      </span>
+                      <span className="text-[8px] text-white/10 font-mono mt-3 tracking-widest uppercase italic">
+                        SEC_ID_0{index}
+                      </span>
                     </div>
                   </div>
-                )}
+
+                  <h3 className="text-white text-xl lg:text-3xl font-black uppercase tracking-tighter mb-2 lg:mb-4 group-hover:text-accent-cyan transition-colors">
+                    {asset.name}
+                  </h3>
+                  <p className="text-secondary text-[8px] lg:text-[10px] mb-6 lg:mb-8 opacity-40 group-hover:opacity-80 transition-opacity uppercase tracking-[4px] font-black">
+                    {isNavLink ? `ACCESS_WORKS // PROTOCOL_REDIRECT` : `SIZE_${asset.size} // TYPE_${asset.type}`}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-4 pt-8 border-t border-white/5 relative z-10">
+                  <div className="flex items-center justify-between group/btn cursor-pointer" onClick={(e) => { e.stopPropagation(); handleView(asset); }}>
+                    <span className="text-[10px] text-white/40 font-black uppercase tracking-[3px] group-hover/btn:text-white transition-colors">
+                      {isNavLink ? "Initialize_Link" : "Tactical_Scan"}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover/btn:border-accent-cyan/40 transition-all">
+                      {isNavLink ? <FiExternalLink className="text-white/20 group-hover/btn:text-accent-cyan transition-colors" /> : <FiEye className="text-white/20 group-hover/btn:text-accent-cyan transition-colors" />}
+                    </div>
+                  </div>
+
+                  {(asset.canDownload || isNavLink) && (
+                    <div className="flex items-center justify-between group/btn cursor-pointer" onClick={(e) => { e.stopPropagation(); handleDownload(asset); }}>
+                      <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[4px]">
+                        {isNavLink ? "Execute_Relay" : "Retrieve_Asset"}
+                      </span>
+                      <div className="w-8 h-8 rounded-full bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/20 group-hover/btn:border-accent-cyan/60 transition-all">
+                        {isNavLink ? <FiZap className="text-accent-cyan group-hover/btn:scale-110 transition-transform" /> : <FiDownload className="text-accent-cyan group-hover/btn:scale-110 transition-transform" />}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Hover Scan Beam */}
+                <motion.div
+                  animate={{ top: ["-100%", "200%"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="absolute left-0 w-full h-20 bg-gradient-to-b from-transparent via-accent-cyan/[0.05] to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
+                />
               </div>
-              
-              {/* Hover Scan Beam */}
-              <motion.div 
-                animate={{ top: ["-100%", "200%"] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 w-full h-20 bg-gradient-to-b from-transparent via-accent-cyan/[0.05] to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
-              />
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       <MediaModal
@@ -230,17 +237,17 @@ const MediaKit = () => {
       >
         {/* Electric Flow Border */}
         <div className="absolute -inset-[2px] bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-cyan rounded-[2rem] lg:rounded-[3rem] opacity-30 group-hover:opacity-100 blur-[2px] transition-opacity duration-1000 animate-border-flow" />
-        
+
         <div className="bg-[#050505] rounded-[1.9rem] lg:rounded-[2.9rem] relative overflow-hidden flex flex-col lg:flex-row items-center justify-between p-8 md:p-12 lg:p-20 border border-white/5 shadow-2xl">
           {/* Parallax Background Decor */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div className="absolute top-0 right-0 w-[300px] lg:w-[600px] h-[300px] lg:h-[600px] bg-accent-purple/[0.03] rounded-full blur-[80px] lg:blur-[120px] -translate-y-1/2 translate-x-1/3" />
             <div className="absolute bottom-0 left-0 w-[200px] lg:w-[400px] h-[200px] lg:h-[400px] bg-accent-cyan/[0.03] rounded-full blur-[60px] lg:blur-[100px] translate-y-1/2 -translate-x-1/4" />
-            
+
             {/* Moving Grid Lines */}
             <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] [background-size:40px_40px] lg:[background-size:60px_60px]" />
           </div>
-          
+
           <div className="flex-1 relative z-10 space-y-6 lg:space-y-8 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 lg:gap-3 px-3 py-1.5 lg:px-4 lg:py-2 bg-accent-purple/10 border border-accent-purple/20 rounded-full">
               <div className="w-1.5 lg:w-2 h-1.5 lg:h-2 rounded-full bg-accent-purple animate-pulse shadow-neon-purple" />
@@ -253,7 +260,7 @@ const MediaKit = () => {
                 <span className="bg-cyber-gradient bg-clip-text text-transparent">Asset Request?</span>
               </h3>
               <p className="text-secondary text-base md:text-lg lg:text-xl opacity-60 leading-relaxed font-medium max-w-2xl mx-auto lg:mx-0">
-                Require unique mission data, strategic creative proposals, or full-clearance codebase access? 
+                Require unique mission data, strategic creative proposals, or full-clearance codebase access?
                 <span className="text-white opacity-100"> Authenticate your protocol</span> to initiate an encrypted direct transmission.
               </p>
             </div>
@@ -275,18 +282,18 @@ const MediaKit = () => {
             <div className="relative group/btn w-full sm:w-auto">
               {/* Dynamic Button Glow */}
               <div className="absolute -inset-2 lg:-inset-4 bg-white/10 blur-xl lg:blur-2xl rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
-              
+
               <MagneticButton
                 onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
                 className="relative !bg-black/60 backdrop-blur-xl !text-white border border-accent-cyan/30 group-hover/btn:border-accent-cyan transition-all uppercase font-black tracking-[2px] lg:tracking-[4px] !px-8 !py-6 sm:!px-12 sm:!py-8 lg:!px-20 lg:!py-10 shadow-2xl text-xs lg:text-sm hover:scale-105 active:scale-95 overflow-hidden group/btn-inner w-full sm:w-auto"
               >
                 <span className="relative z-10 group-hover/btn-inner:text-accent-cyan transition-colors whitespace-nowrap">Authenticate Uplink</span>
-                
+
                 {/* Internal Neon Glow */}
                 <div className="absolute inset-0 bg-accent-cyan/5 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                
+
                 {/* Internal Scan Beam */}
-                <motion.div 
+                <motion.div
                   animate={{ left: ["-100%", "200%"] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                   className="absolute top-0 bottom-0 w-12 lg:w-20 bg-gradient-to-r from-transparent via-accent-cyan/10 to-transparent skew-x-12 pointer-events-none"
@@ -310,7 +317,7 @@ const MediaKit = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-10 lg:mt-12">
               <span className="text-[8px] lg:text-[10px] text-white/10 font-mono tracking-wider lg:tracking-widest uppercase">Response_Time: &lt; 24H</span>
             </div>
