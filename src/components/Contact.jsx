@@ -146,7 +146,7 @@ Reply Soon as Possible :)
             </div>
           </div>
 
-          <div className="p-8 md:p-12 relative">
+          <div className="p-6 md:p-12 relative">
             {/* Terminal Grid Background */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] opacity-20 pointer-events-none" />
 

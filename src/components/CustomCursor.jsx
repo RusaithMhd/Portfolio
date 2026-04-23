@@ -15,12 +15,44 @@ const CustomCursor = () => {
   const trailYSpring = useSpring(trailY, { damping: 40, stiffness: 150 });
 
   useEffect(() => {
+    let isTouching = false;
+
     const moveMouse = (e) => {
-      const { clientX, clientY } = e;
+      let clientX, clientY;
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+        isTouching = true;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      if (clientX === undefined || clientY === undefined) return;
+
       cursorX.set(clientX - 16);
       cursorY.set(clientY - 16);
       trailX.set(clientX - 32);
       trailY.set(clientY - 32);
+    };
+
+    const handleTouchEnd = () => {
+      isTouching = false;
+    };
+
+    const handleScroll = () => {
+      // If user is actively touching or on desktop, don't use autonomous mode
+      if (window.innerWidth >= 1024 || isTouching) return;
+      
+      // Autonomous Drone Scanner mode during momentum scrolling on mobile
+      const progress = window.scrollY;
+      const targetX = (window.innerWidth / 2) + Math.sin(progress * 0.005) * (window.innerWidth * 0.35);
+      const targetY = (window.innerHeight / 2) + Math.cos(progress * 0.008) * (window.innerHeight * 0.25);
+      
+      cursorX.set(targetX - 16);
+      cursorY.set(targetY - 16);
+      trailX.set(targetX - 32);
+      trailY.set(targetY - 32);
     };
 
     const handleHover = (e) => {
@@ -38,10 +70,18 @@ const CustomCursor = () => {
     };
 
     window.addEventListener("mousemove", moveMouse);
+    window.addEventListener("touchmove", moveMouse, { passive: true });
+    window.addEventListener("touchstart", moveMouse, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("mouseover", handleHover);
 
     return () => {
       window.removeEventListener("mousemove", moveMouse);
+      window.removeEventListener("touchmove", moveMouse);
+      window.removeEventListener("touchstart", moveMouse);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mouseover", handleHover);
     };
   }, [cursorX, cursorY, trailX, trailY]);

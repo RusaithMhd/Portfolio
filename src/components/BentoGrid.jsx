@@ -53,7 +53,7 @@ const ProjectCard = ({ index, project, onClick }) => {
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative h-full glass-card overflow-hidden group cursor-pointer p-8 flex flex-col justify-between border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40 ${
+      className={`relative h-full glass-card overflow-hidden group cursor-pointer p-6 md:p-8 flex flex-col justify-between border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40 ${
         index === 0 ? "md:col-span-2" : ""
       }`}
       onClick={onClick}
@@ -156,7 +156,7 @@ const BentoGrid = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[450px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[400px] md:auto-rows-[450px]">
         {projects.map((project, index) => (
           <ProjectCard 
             key={`project-${index}`}
@@ -169,7 +169,7 @@ const BentoGrid = () => {
         {/* Freelance Logos Card */}
         <motion.div
           variants={fadeIn("up", "spring", projects.length * 0.1, 0.75)}
-          className="relative glass-card overflow-hidden group cursor-pointer p-8 flex flex-col justify-between border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40"
+          className="relative glass-card overflow-hidden group cursor-pointer p-6 md:p-8 flex flex-col justify-between border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40"
           onClick={() => setIsLogosModalOpen(true)}
         >
           {/* Holographic Overlay */}

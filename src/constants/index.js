@@ -70,7 +70,7 @@ const services = [
     icon: "FiSmartphone",
   },
   {
-    title: "IT Executive",
+    title: "IT Administrator",
     icon: "FiCpu",
   },
   {

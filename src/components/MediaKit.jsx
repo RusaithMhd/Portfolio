@@ -90,7 +90,7 @@ const MediaKit = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       {/* Background Decor - Digital Blueprint */}
       <div className="absolute inset-0 -z-10 pointer-events-none opacity-10">
         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(0,255,255,0.1)_0,transparent_50%)]" />

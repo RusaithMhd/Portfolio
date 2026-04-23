@@ -4,6 +4,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #020202;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,8 +27,8 @@
 }
 
 body {
-  @apply bg-primary text-white-100 overflow-x-hidden;
-  cursor: auto; /* Restore default cursor for better usability */
+  @apply text-white-100;
+  cursor: auto; 
 }
 
 /* Glassmorphism Utilities */
@@ -35,16 +50,27 @@ body {
   will-change: transform, border-color;
 }
 
+/* Navbar Wrapper Utility */
+.nav-container {
+  @apply w-full flex items-center fixed top-0 left-0 right-0 z-50 transition-all duration-300;
+}
+
+/* Main Section/Content Wrappers */
+.section-container {
+  @apply max-w-7xl mx-auto w-full px-6 sm:px-16;
+}
+
 /* Liquid Background Blobs */
 /* Dynamic Grid Background */
 .grid-background {
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
   perspective: 1000px;
   transform: rotateX(60deg) translateY(-20%);
-  mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+  width: 100%;
+  left: 0;
+  mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 40%, transparent 95%);
 }
 
 .grid-glow {
@@ -58,8 +84,8 @@ body {
 }
 
 @keyframes grid-pulse {
-  0% { opacity: 0.3; transform: scale(1); }
-  100% { opacity: 0.6; transform: scale(1.1); }
+  from { opacity: 0.5; transform: scale(1); }
+  to { opacity: 0.8; transform: scale(1.1); }
 }
 
 .liquid-blob {
@@ -69,17 +95,15 @@ body {
   transform: translateZ(0); /* Force GPU acceleration */
 }
 
-/* Custom Scrollbar */
+/* Hide Scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-primary;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-white/10 rounded-full hover:bg-white/20 transition-all;
+/* Hide Scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .custom-scrollbar::-webkit-scrollbar {

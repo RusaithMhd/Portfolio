@@ -26,12 +26,12 @@ const iconMap = {
   FiTarget: FiTarget,
 };
 
-const StatusModule = ({ label, value, icon: Icon, color }) => (
+const StatusModule = ({ label, value, icon: Icon, colorClass, shadowClass }) => (
   <motion.div 
     whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.05)" }}
     className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-accent-cyan/20 transition-all group cursor-default"
   >
-    <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${color}/5 text-${color} border border-${color}/10 group-hover:shadow-neon-cyan transition-all`}>
+    <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:border-accent-cyan/30 transition-all ${colorClass} ${shadowClass}`}>
       <Icon className="text-xl" />
     </div>
     <div className="flex flex-col">
@@ -61,13 +61,13 @@ const About = () => {
   return (
     <div className="relative">
       {/* Biometric Scan Background Effect */}
-      <div className="absolute -top-20 -left-20 w-96 h-96 bg-accent-cyan/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute -top-20 lg:-left-20 left-1/2 -translate-x-1/2 lg:translate-x-0 w-72 h-72 md:w-96 md:h-96 bg-accent-cyan/5 blur-[120px] rounded-full pointer-events-none" />
       
-      <div className="flex flex-col lg:flex-row gap-20 items-start">
-        <div className="flex-1">
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center lg:items-start justify-center">
+        <div className="flex-[1.2] w-full">
           <motion.div variants={textVariant()} className="relative">
             <p className={styles.sectionSubText}>Accessing Identity Arch...</p>
-            <h2 className={styles.sectionHeadText}>System Origin.</h2>
+            <h2 className={`${styles.sectionHeadText} leading-tight`}>System Origin.</h2>
             
             {/* Scanning Line Animation */}
             <motion.div 
@@ -89,10 +89,10 @@ const About = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-              <StatusModule label="Clearance" value="Level 09 / Admin" icon={FiShield} color="accent-cyan" />
-              <StatusModule label="Processing" value="Graphic + Dev" icon={FiZap} color="accent-purple" />
-              <StatusModule label="Uptime" value="5+ Years Active" icon={FiActivity} color="white" />
-              <StatusModule label="Origin" value="Colombo / SL" icon={FiTarget} color="white" />
+              <StatusModule label="Clearance" value="Level 09 / Admin" icon={FiShield} colorClass="text-accent-cyan" shadowClass="group-hover:shadow-neon-cyan" />
+              <StatusModule label="Processing" value="Graphic + Dev" icon={FiZap} colorClass="text-accent-purple" shadowClass="group-hover:shadow-neon-purple" />
+              <StatusModule label="Uptime" value="5+ Years Active" icon={FiActivity} colorClass="text-white" shadowClass="" />
+              <StatusModule label="Origin" value="Colombo / SL" icon={FiTarget} colorClass="text-white" shadowClass="" />
             </div>
 
             <div className="flex flex-wrap gap-6 pt-4">
@@ -118,11 +118,11 @@ const About = () => {
             </div>
           </motion.div>
           
-          <div className="mt-20">
-            <h3 className="text-white font-black uppercase tracking-[4px] text-xs mb-10 flex items-center gap-4">
+          <div className="mt-20 flex flex-col items-center lg:items-start w-full">
+            <h3 className="text-white font-black uppercase tracking-[4px] text-xs mb-10 flex items-center gap-4 justify-center lg:justify-start w-full lg:w-auto">
               <span className="p-1 rounded bg-accent-cyan" /> Journey Protocol
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 w-full max-w-2xl mx-auto lg:mx-0">
               <JourneyNode index={0} year="2025 - PRES" title="IT Executive & Designer" company="ChillFrost (Pvt) Ltd" />
               <JourneyNode index={1} year="2024 - 2025" title="Web Developer" company="IMSS (Pvt) Ltd" />
               <JourneyNode index={2} year="2022 - 2024" title="Digital Marketer" company="Food Champ" />
@@ -137,7 +137,7 @@ const About = () => {
             className="w-full relative group"
           >
             {/* Elite Performance Radar SVG */}
-            <div className="absolute -top-16 -right-16 w-48 h-48 opacity-20 pointer-events-none rotate-12">
+            <div className="absolute -top-16 lg:-right-16 right-0 w-48 h-48 opacity-20 pointer-events-none rotate-12">
               <svg viewBox="0 0 100 100" className="w-full h-full fill-none stroke-accent-cyan stroke-[0.5]">
                 <circle cx="50" cy="50" r="45" strokeDasharray="5,5" />
                 <circle cx="50" cy="50" r="35" />
@@ -155,20 +155,7 @@ const About = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-[3rem] blur-xl opacity-10 group-hover:opacity-30 transition duration-1000"></div>
             
             <div className="relative glass-card border-white/10 bg-black/60 overflow-hidden rounded-[3rem] shadow-2xl">
-              <div className="flex items-center justify-between p-6 border-b border-white/5 bg-white/[0.02]">
-                <div className="flex flex-col">
-                  <span className="text-[9px] text-accent-cyan font-black uppercase tracking-[3px] mb-1">System Core</span>
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] text-white/40 font-bold uppercase tracking-[2px]">Clearance: ADMIN</span>
-                </div>
-              </div>
-              <div className="p-2">
+              <div className="p-1">
                 <Terminal />
               </div>
             </div>

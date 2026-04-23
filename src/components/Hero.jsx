@@ -73,8 +73,13 @@ const Hero = () => {
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+    
+    if (clientX === undefined || clientY === undefined) return;
+
+    const x = (clientX - rect.left) / rect.width - 0.5;
+    const y = (clientY - rect.top) / rect.height - 0.5;
     mouseX.set(x);
     mouseY.set(y);
   };
@@ -83,36 +88,52 @@ const Hero = () => {
     const interval = setInterval(() => {
       setRoleIndex((prev) => (prev + 1) % roles.length);
     }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+
+    const handleScroll = () => {
+      if (window.innerWidth >= 1024) return;
+      const scrollY = window.scrollY;
+      const progress = Math.min(1, Math.max(0, scrollY / window.innerHeight));
+      const offset = progress - 0.5;
+      mouseY.set(offset * 0.8);
+      mouseX.set(offset * -0.3);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [mouseX, mouseY]);
 
   return (
     <section
       onMouseMove={handleMouseMove}
-      className="relative w-full min-h-screen mx-auto flex items-center justify-center overflow-hidden pt-36 pb-32 md:pt-24 md:pb-20 bg-primary"
+      onTouchMove={handleMouseMove}
+      className="relative w-full min-h-screen flex items-center lg:justify-center overflow-x-hidden pt-36 pb-40 md:pt-24 md:pb-32 bg-primary"
     >
       {/* Dynamic Grid Foundation */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="grid-background absolute inset-0 opacity-20" />
         <div className="grid-glow" />
       </div>
 
-      <div className={`${styles.paddingX} max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-16 z-10 w-full`}>
+      <div className={`${styles.paddingX} max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between gap-4 sm:gap-8 md:gap-16 z-10 w-full`}>
 
         {/* Left Side: Text Content */}
-        <div className="flex-1 text-center lg:text-left mt-0">
+        <div className="flex-1 text-center lg:text-left mt-0 lg:pt-12">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full mb-6 border-accent-cyan/20 bg-accent-cyan/5 shadow-neon-cyan">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
-              <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[4px]">SYSTEM_IDENTIFIED: RUSAITH_V4.2</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full mb-6 border-accent-cyan/20 bg-accent-cyan/5 shadow-neon-cyan max-w-full overflow-hidden">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse shrink-0" />
+              <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[1px] sm:tracking-[4px] truncate">SYSTEM_IDENTIFIED: RUSAITH_V4.2</span>
             </div>
 
-            <h1 className="text-white text-5xl sm:text-7xl md:text-8xl font-black mb-6 tracking-tighter leading-[0.95] uppercase text-nowrap relative group">
-              <div className="flex items-center gap-4">
+            <h1 className="text-white text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter leading-[0.95] uppercase relative group max-w-full text-center lg:text-left">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-4">
                 <ScrambleText text="MIM" className="block text-accent-cyan" delay={0.5} />
                 <motion.div
                   animate={{
@@ -120,12 +141,12 @@ const Hero = () => {
                     scale: [1, 1.2, 1]
                   }}
                   transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                  className="hidden md:block"
+                  className="hidden xs:block"
                 >
-                  <FiZap className="text-4xl text-accent-cyan drop-shadow-neon-cyan opacity-40 group-hover:opacity-100 transition-opacity" />
+                  <FiZap className="text-2xl sm:text-4xl text-accent-cyan drop-shadow-neon-cyan opacity-40 group-hover:opacity-100 transition-opacity" />
                 </motion.div>
               </div>
-              <div className="flex items-center">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start">
                 <span className="bg-cyber-gradient bg-clip-text text-transparent inline-block drop-shadow-neon-cyan">
                   <ScrambleText text="R" className="text-accent-cyan font-serif" delay={0.8} />
                   <ScrambleText text="usaith" delay={1} />
@@ -133,7 +154,7 @@ const Hero = () => {
               </div>
             </h1>
 
-            <div className="h-[50px] mb-8">
+            <div className="h-[50px] mb-4">
               <AnimatePresence mode="wait">
                 <motion.h3
                   key={roles[roleIndex]}
@@ -141,49 +162,150 @@ const Hero = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
-                  className="text-xl md:text-3xl text-white/80 font-bold uppercase tracking-[6px]"
+                  className="text-xl md:text-3xl text-accent-cyan font-bold uppercase tracking-[6px]"
                 >
                   {roles[roleIndex]}
                 </motion.h3>
               </AnimatePresence>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="text-white/50 text-xs sm:text-sm md:text-base max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed font-light px-4 sm:px-0"
+            >
+              Architecting high-performance digital ecosystems. Specializing in cyber-premium web development, brand engineering, and immersive user experiences.
+            </motion.p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <MagneticButton
                 onClick={() => document.getElementById("projects").scrollIntoView({ behavior: "smooth" })}
-                className="!bg-accent-cyan !text-black border-none uppercase font-black tracking-[2px] !px-8 !py-4 hover:shadow-neon-cyan text-sm w-full sm:w-auto"
+                className="!bg-accent-cyan !text-black border-none uppercase font-black tracking-[2px] !px-8 !py-4 hover:shadow-neon-cyan text-sm w-full sm:w-auto relative overflow-hidden group"
               >
-                Access Projects
+                <span className="relative z-10">Access Projects</span>
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0" />
               </MagneticButton>
               <MagneticButton
                 onClick={() => window.open(publicUrls.resume, "_blank")}
-                className="!bg-transparent !text-white border border-white/10 hover:border-accent-purple/40 uppercase font-black tracking-[2px] !px-8 !py-4 hover:bg-accent-purple/5 text-sm w-full sm:w-auto"
+                className="!bg-black/50 !text-white border border-white/10 hover:border-accent-cyan/40 uppercase font-black tracking-[2px] !px-8 !py-4 hover:bg-accent-cyan/10 text-sm w-full sm:w-auto backdrop-blur-md"
               >
                 Fetch Credentials
               </MagneticButton>
             </div>
+
+            {/* System Status / HUD Dashboard below buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="mt-12 lg:mt-16 grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 border-t border-white/5 pt-10 w-full max-w-2xl mx-auto lg:mx-0 text-center lg:text-left"
+            >
+              {/* Row 1 */}
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Global_Uplink</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse shadow-neon-cyan shrink-0" />
+                  <span className="text-xs sm:text-sm font-black text-white tracking-widest truncate">ONLINE</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Core_Stack</span>
+                <div className="flex items-center gap-3 text-accent-cyan/80 text-sm sm:text-base">
+                  <FiCode className="shrink-0" />
+                  <FiLayers className="shrink-0" />
+                  <FiCpu className="shrink-0" />
+                </div>
+              </div>
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Neural_Sync</span>
+                <div className="flex items-center gap-1.5">
+                  {[...Array(5)].map((_, i) => (
+                    <motion.div 
+                      key={i}
+                      animate={{ scaleY: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1, repeat: Infinity, delay: i * 0.1 }}
+                      className="w-1 h-4 bg-accent-cyan/60 rounded-full origin-bottom shrink-0"
+                    />
+                  ))}
+                  <span className="text-[10px] sm:text-xs font-black text-accent-cyan ml-2 truncate">99.8%</span>
+                </div>
+              </div>
+              
+              {/* Row 2 */}
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Security</span>
+                <div className="flex items-center gap-2 text-green-400">
+                  <FiShield className="text-xs sm:text-base shrink-0" />
+                  <span className="text-[10px] sm:text-xs font-black tracking-widest drop-shadow-[0_0_8px_rgba(74,222,128,0.5)] truncate">ENCRYPTED</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Active_Nodes</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs sm:text-sm font-black text-accent-cyan tracking-widest shrink-0">12</span>
+                  <span className="text-[9px] sm:text-[10px] text-white/60 font-black tracking-widest truncate">DEPLOYED</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Sys_Load</span>
+                <div className="w-full max-w-[100px] sm:max-w-[120px] h-1.5 bg-white/5 rounded-full overflow-hidden mt-1 shrink-0">
+                  <motion.div 
+                    animate={{ scaleX: [0.3, 0.8, 0.4] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-full h-full bg-accent-purple shadow-neon-purple origin-left"
+                  />
+                </div>
+              </div>
+
+              {/* Row 3 */}
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Latency</span>
+                <div className="flex items-center gap-2 text-white">
+                  <span className="text-xs sm:text-sm font-black tracking-widest text-accent-cyan shrink-0">14</span>
+                  <span className="text-[9px] sm:text-[10px] text-white/60 font-black tracking-widest shrink-0">MS</span>
+                  <motion.div 
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="w-1.5 h-1.5 rounded-full bg-accent-cyan ml-1 shadow-neon-cyan shrink-0"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Clearance</span>
+                <div className="flex items-center gap-2">
+                  <div className="px-3 py-1 rounded border border-accent-purple/40 bg-accent-purple/10 shadow-[0_0_10px_rgba(139,92,246,0.2)] shrink-0 max-w-full overflow-hidden">
+                    <span className="text-[9px] sm:text-[10px] font-black text-accent-purple tracking-widest truncate block">LEVEL 9</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col items-center lg:items-start gap-3 min-w-0">
+                <span className="text-[10px] sm:text-[11px] text-white/40 font-mono uppercase tracking-[2px] sm:tracking-[4px] truncate">Data_Stream</span>
+                <span className="text-[9px] sm:text-[10px] font-mono text-accent-cyan opacity-60 tracking-widest animate-pulse truncate">0x7D2E</span>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
 
         {/* Right Side: Cinematic Hacker Portrait */}
-        <div className="flex-1 flex justify-center items-center mt-12 lg:mt-0 perspective-1000">
+        <div className="flex-1 flex justify-center lg:justify-end items-center mt-12 lg:mt-0 perspective-1000 w-full">
           <motion.div
             style={{ rotateX, rotateY }}
-            className="relative w-full max-w-[400px] md:max-w-[500px]"
+            className="relative w-full max-w-[280px] xs:max-w-[320px] md:max-w-[500px] lg:max-w-[600px]"
           >
             {/* Ambient Background Glows */}
             <div className="absolute -inset-20 bg-accent-cyan/10 blur-[100px] rounded-full animate-pulse-slow z-0" />
             <div className="absolute -inset-10 bg-accent-purple/5 blur-[80px] rounded-full animate-pulse-slow z-0" style={{ animationDelay: '2s' }} />
 
-            <FloatingCard className="relative border-white/10 backdrop-blur-3xl overflow-hidden p-3 bg-white/5 rounded-[3rem] shadow-2xl shadow-black/80">
+            <FloatingCard className="relative border-white/10 backdrop-blur-xl md:backdrop-blur-3xl overflow-hidden p-3 bg-white/5 rounded-[3rem] shadow-2xl shadow-black/80">
 
               {/* Image Container with Hacker Layers - Ultra High Quality */}
-              <div className="relative w-full aspect-[2/3] rounded-[2.5rem] overflow-hidden glass border-white/10 shadow-inner">
+              <div className="relative w-full min-h-[400px] md:min-h-[500px] aspect-[2/3] rounded-[2.5rem] overflow-hidden glass border-white/10 shadow-inner flex-shrink-0">
 
                 {/* User Portrait - High Contrast / Cinematic */}
                 <motion.img
                   src={rusaith}
-                  alt="Muhammathu Rusaith"
+                  alt="Rusaith"
                   className="w-full h-full object-cover object-top brightness-[1.15] contrast-[1.25] saturate-[1.1] transition-all duration-700"
                   style={{
                     filter: "drop-shadow(0 0 20px rgba(0,255,255,0.3)) hue-rotate(-5deg)"
@@ -192,7 +314,7 @@ const Hero = () => {
 
                 {/* High-Quality Cinematic Grain Layer */}
                 <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none z-20"
-                     style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 200 200%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noiseFilter%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noiseFilter)%27/%3E%3C/svg%3E")' }} />
+                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 200 200%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noiseFilter%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noiseFilter)%27/%3E%3C/svg%3E")' }} />
 
                 {/* Cyber Tint Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-primary/20 opacity-90 z-10" />
@@ -333,72 +455,6 @@ const Hero = () => {
                   </div>
                 </HackerUIElement>
 
-                {/* Identity Name Overlay - MOVED TO BOTTOM LEFT & ALWAYS ACTIVE ANIMATION */}
-                <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 md:left-10 md:translate-x-0 z-30 w-[90%] md:w-auto">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="glass-morphism px-5 py-4 md:px-6 md:py-4 rounded-[1.5rem] md:rounded-[2rem] border-white/10 bg-black/40 backdrop-blur-3xl shadow-2xl flex flex-col items-center md:items-start text-center md:text-left overflow-hidden"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <motion.div
-                        animate={{ opacity: [0.4, 1, 0.4] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="w-1.5 h-1.5 rounded-full bg-accent-cyan"
-                      />
-                      <span className="text-[8px] md:text-[10px] text-accent-cyan font-black tracking-[4px] md:tracking-[6px] uppercase opacity-60">Identity_Verified</span>
-                    </div>
-
-                    <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter leading-tight flex flex-wrap justify-center md:justify-start gap-[2px]">
-                      {"Muhammathu Rusaith".split("").map((letter, i) => (
-                        <motion.span
-                          key={i}
-                          animate={{
-                            opacity: [0, 1],
-                            y: [10, 0],
-                            filter: ["blur(5px)", "blur(0px)"],
-                            textShadow: ["0 0 0px #00ffff", "0 0 10px #00ffff", "0 0 0px #00ffff"]
-                          }}
-                          transition={{
-                            duration: 0.5,
-                            delay: i * 0.05,
-                            repeat: Infinity,
-                            repeatDelay: 10,
-                            ease: "easeOut"
-                          }}
-                          className="inline-block relative"
-                        >
-                          {letter === " " ? "\u00A0" : letter}
-
-                          {/* Sublte Glitch Overlay */}
-                          <motion.span
-                            animate={{
-                              opacity: [0, 0.5, 0],
-                              x: [0, -2, 2, 0]
-                            }}
-                            transition={{
-                              duration: 0.2,
-                              repeat: Infinity,
-                              repeatDelay: Math.random() * 5 + 2
-                            }}
-                            className="absolute inset-0 text-accent-cyan blur-[2px] pointer-events-none"
-                          >
-                            {letter}
-                          </motion.span>
-                        </motion.span>
-                      ))}
-                    </h3>
-
-                    {/* Progress Bar under name */}
-                    <div className="w-full h-[1px] bg-white/5 mt-3 relative overflow-hidden">
-                      <motion.div
-                        animate={{ left: ["-100%", "100%"] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-accent-cyan/40 to-transparent"
-                      />
-                    </div>
-                  </motion.div>
-                </div>
 
                 {/* Vertical Role Bar - Optimized for Mobile */}
                 <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-4 z-30 flex flex-col gap-3 md:gap-4 scale-75 md:scale-100">
@@ -425,6 +481,81 @@ const Hero = () => {
                 {/* Corner Frame Accents - Sharper Design */}
                 <div className="absolute top-8 right-8 w-20 h-20 border-t-2 border-r-2 border-accent-cyan/40 rounded-tr-3xl pointer-events-none z-20" />
                 <div className="absolute bottom-8 left-8 w-20 h-20 border-b-2 border-l-2 border-accent-cyan/40 rounded-bl-3xl pointer-events-none z-20" />
+              </div>
+
+              {/* Connecting Visual Element */}
+              <div className="w-full flex justify-center items-center mt-2 -mb-2 z-10 relative">
+                <div className="w-[1px] h-6 bg-gradient-to-b from-accent-cyan/50 to-transparent" />
+                <motion.div
+                  animate={{ y: [0, 24, 0], opacity: [0, 1, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-0 w-1 h-1 bg-accent-cyan rounded-full shadow-neon-cyan"
+                />
+              </div>
+
+              {/* Identity Name Overlay - CENTERED BELOW PHOTO */}
+              <div className="flex justify-center mt-4 mb-2 w-full z-30">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="glass-morphism px-4 py-3 md:px-6 md:py-4 rounded-[1.5rem] md:rounded-[2rem] border-white/10 bg-black/40 backdrop-blur-3xl shadow-2xl flex flex-col items-center text-center overflow-hidden w-[90%] md:w-max"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <motion.div
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="w-1.5 h-1.5 rounded-full bg-accent-cyan"
+                    />
+                    <span className="text-[8px] md:text-[10px] text-accent-cyan font-black tracking-[4px] md:tracking-[6px] uppercase opacity-60">Identity_Verified</span>
+                  </div>
+
+                  <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter leading-tight flex flex-wrap justify-center gap-[2px]">
+                    {"Rusaith".split("").map((letter, i) => (
+                      <motion.span
+                        key={i}
+                        animate={{
+                          opacity: [0, 1],
+                          y: [10, 0]
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          delay: i * 0.05,
+                          repeat: Infinity,
+                          repeatDelay: 10,
+                          ease: "easeOut"
+                        }}
+                        className="inline-block relative text-shadow-neon-cyan"
+                      >
+                        {letter === " " ? "\u00A0" : letter}
+
+                        {/* Sublte Glitch Overlay */}
+                        <motion.span
+                          animate={{
+                            opacity: [0, 0.5, 0],
+                            x: [0, -2, 2, 0]
+                          }}
+                          transition={{
+                            duration: 0.2,
+                            repeat: Infinity,
+                            repeatDelay: Math.random() * 5 + 2
+                          }}
+                          className="absolute inset-0 text-accent-cyan blur-[2px] pointer-events-none"
+                        >
+                          {letter}
+                        </motion.span>
+                      </motion.span>
+                    ))}
+                  </h3>
+
+                  {/* Progress Bar under name */}
+                  <div className="w-full h-[1px] bg-white/5 mt-3 relative overflow-hidden">
+                    <motion.div
+                      animate={{ left: ["-100%", "100%"] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-accent-cyan/40 to-transparent"
+                    />
+                  </div>
+                </motion.div>
               </div>
 
               {/* Minimalist Card Footer */}
@@ -477,7 +608,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-4 w-full flex flex-col justify-center items-center z-10 gap-2 pointer-events-none"
+        className="absolute bottom-6 md:bottom-8 w-full flex flex-col justify-center items-center z-10 gap-2 pointer-events-none"
       >
         <span className="text-[10px] text-white/20 font-black uppercase tracking-[5px]">Initialize_Discovery</span>
         <a href="#about" className="pointer-events-auto">

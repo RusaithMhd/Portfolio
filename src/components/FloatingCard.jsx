@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const FloatingCard = ({ children, className = "" }) => {
@@ -13,12 +13,37 @@ const FloatingCard = ({ children, className = "" }) => {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ref.current || window.innerWidth >= 1024) return;
+      
+      const rect = ref.current.getBoundingClientRect();
+      const elementCenterY = rect.top + rect.height / 2;
+      const viewportCenterY = window.innerHeight / 2;
+      
+      const offset = (elementCenterY - viewportCenterY) / (window.innerHeight / 2);
+      const clampedOffset = Math.max(-0.5, Math.min(0.5, offset * 0.6));
+      
+      y.set(clampedOffset);
+      x.set(-clampedOffset * 0.3);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [x, y]);
+
   const handleMouseMove = (e) => {
     const rect = ref.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+    
+    if (clientX === undefined || clientY === undefined) return;
+
+    const mouseX = clientX - rect.left;
+    const mouseY = clientY - rect.top;
     const xPct = mouseX / width - 0.5;
     const yPct = mouseY / height - 0.5;
     x.set(xPct);
@@ -35,12 +60,14 @@ const FloatingCard = ({ children, className = "" }) => {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={handleMouseMove}
+      onTouchEnd={handleMouseLeave}
       style={{
         rotateY,
         rotateX,
         transformStyle: "preserve-3d",
       }}
-      className={`relative w-full aspect-square glass-card flex items-center justify-center p-8 ${className}`}
+      className={`relative w-full glass-card flex items-center justify-center p-8 group ${className}`}
     >
       <div
         style={{

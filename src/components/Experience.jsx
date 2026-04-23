@@ -33,7 +33,7 @@ const ExperienceCard = ({ experience, index }) => {
   const isActive = index === 0;
 
   return (
-    <div className="relative flex gap-8 md:gap-20 pb-24 last:pb-0 group">
+    <div className="relative flex gap-4 md:gap-20 pb-20 md:pb-24 last:pb-0 group">
       {/* Cyber Timeline Bus */}
       <div className="absolute left-[19px] top-0 bottom-0 w-[2px] bg-white/[0.03] group-last:bg-transparent overflow-hidden">
         <motion.div 
@@ -65,7 +65,7 @@ const ExperienceCard = ({ experience, index }) => {
       <motion.div 
         variants={fadeIn("left", "spring", index * 0.1, 1)}
         style={{ clipPath: "polygon(0 0, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%)" }}
-        className="flex-1 glass-morphism p-8 md:p-12 relative overflow-hidden group/card bg-black/40 border border-white/5 hover:border-accent-cyan/30 transition-all duration-500"
+        className="flex-1 glass-morphism p-6 md:p-12 relative overflow-hidden group/card bg-black/40 border border-white/5 hover:border-accent-cyan/30 transition-all duration-500"
       >
         {/* Animated Grid Background */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">

@@ -69,7 +69,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`${styles.paddingX} w-full flex items-center fixed top-0 z-50 transition-all duration-300 ${scrolled ? "py-3 bg-primary/40 backdrop-blur-lg border-b border-white/10" : "py-5 bg-transparent"
+      className={`${styles.paddingX} w-full flex items-center fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "py-3 bg-primary/40 backdrop-blur-lg border-b border-white/10" : "py-5 bg-transparent"
         }`}
     >
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
@@ -122,7 +122,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className="md:hidden flex flex-1 justify-end items-center">
+        <div className="md:hidden flex justify-end items-center">
           <div
             className="w-10 h-10 flex items-center justify-center glass rounded-xl cursor-pointer border border-white/5"
             onClick={() => setToggle(!toggle)}

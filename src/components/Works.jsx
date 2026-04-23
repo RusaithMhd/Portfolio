@@ -21,8 +21,8 @@ const Works = () => {
         />
       </div>
 
-      <motion.div variants={textVariant()} className="flex justify-between items-end">
-        <div>
+      <motion.div variants={textVariant()} className="flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left gap-4">
+        <div className="flex flex-col items-center md:items-start">
           <div className="flex items-center gap-4 mb-2">
             <div className="w-8 h-[1px] bg-accent-cyan" />
             <p className="text-white font-black uppercase tracking-[5px] text-[10px] opacity-40">System_Archive</p>

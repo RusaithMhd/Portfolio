@@ -132,7 +132,7 @@ const LogosModal = ({ isOpen, onClose }) => {
             className="relative w-full max-w-7xl max-h-[92vh] glass-card rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#080808] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)]"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 md:p-8 border-b border-white/5 bg-black/40 flex-shrink-0">
+            <div className="flex items-center justify-between p-4 md:p-8 border-b border-white/5 bg-black/40 flex-shrink-0">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-accent-cyan/5 border border-accent-cyan/20 flex items-center justify-center">
                   <FiLayers className="text-accent-cyan text-xl" />
@@ -156,7 +156,7 @@ const LogosModal = ({ isOpen, onClose }) => {
             </div>
 
             {/* Tab Bar */}
-            <div className="flex items-center gap-1 px-6 md:px-8 py-3 border-b border-white/5 bg-black/20 overflow-x-auto flex-shrink-0">
+            <div className="flex items-center gap-1 px-4 md:px-8 py-3 border-b border-white/5 bg-black/20 overflow-x-auto flex-shrink-0">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
@@ -175,7 +175,7 @@ const LogosModal = ({ isOpen, onClose }) => {
             </div>
 
             {/* Grid */}
-            <div data-lenis-prevent className="flex-1 overflow-y-auto p-6 md:p-8">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto p-4 md:p-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}

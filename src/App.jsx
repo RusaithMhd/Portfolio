@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import About from "./components/About";
-import Experience from "./components/Experience";
-import Tech from "./components/Tech";
-import Works from "./components/Works";
-import MediaKit from "./components/MediaKit";
-import Testimonials from "./components/Testimonials";
-import Contact from "./components/Contact";
+
+// Lazy Loaded Components for Code Splitting (Reduces Initial Load Time)
+const About = lazy(() => import("./components/About"));
+const Experience = lazy(() => import("./components/Experience"));
+const Tech = lazy(() => import("./components/Tech"));
+const Works = lazy(() => import("./components/Works"));
+const MediaKit = lazy(() => import("./components/MediaKit"));
+const Testimonials = lazy(() => import("./components/Testimonials"));
+const Contact = lazy(() => import("./components/Contact"));
 import CustomCursor from "./components/CustomCursor";
 import LiquidBackground from "./components/LiquidBackground";
 import CyberNetwork from "./components/CyberNetwork";
@@ -27,15 +29,26 @@ const App = () => {
   });
 
   useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2500);
+    }, 1500);
     return () => clearTimeout(timer);
   }, []);
 
+  // Force scroll to top exactly when the loader finishes and the site is revealed
+  useEffect(() => {
+    if (!isLoading) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [isLoading]);
+
   return (
     <BrowserRouter>
-      <div className="relative z-0 bg-primary min-h-screen overflow-x-hidden max-w-[100vw]">
+      <div className="relative z-0 bg-primary min-h-screen overflow-x-hidden">
         <AnimatePresence mode="wait">
           {isLoading && <PageLoader key="loader" />}
         </AnimatePresence>
@@ -58,15 +71,17 @@ const App = () => {
             <div className="relative z-10">
               <Navbar />
               <Hero />
-              <About />
-              <Experience />
-              <Tech />
-              <Works />
-              <MediaKit />
-              {/* <Testimonials /> */}
-              <div className="relative z-0">
-                <Contact />
-              </div>
+              <Suspense fallback={<div className="h-20 bg-primary" />}>
+                <About />
+                <Experience />
+                <Tech />
+                <Works />
+                <MediaKit />
+                {/* <Testimonials /> */}
+                <div className="relative z-0">
+                  <Contact />
+                </div>
+              </Suspense>
             </div>
           </SmoothScroll>
         </div>

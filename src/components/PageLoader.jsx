@@ -101,44 +101,39 @@ const SleekReveal = ({ subtitle }) => {
 
 const MatrixRain = () => {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~";
-  const columns = 50;
+  const columns = 25; // Drastically reduced for DOM performance
   
   return (
-    <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
+    <div className="absolute inset-0 overflow-hidden opacity-[0.05] md:opacity-10 pointer-events-none">
       {[...Array(columns)].map((_, i) => {
-        const duration = Math.random() * 6 + 4;
+        const duration = Math.random() * 5 + 3;
         const delay = Math.random() * 5;
-        const columnContent = Array(20).fill().map(() => 
+        const columnContent = Array(15).fill().map(() => 
           characters[Math.floor(Math.random() * characters.length)]
-        );
+        ).join('\n');
 
         return (
           <div 
             key={i} 
-            className="absolute top-[-100%] flex flex-col text-[9px] font-mono leading-none"
+            className="absolute top-[-100%] flex flex-col text-[10px] md:text-sm font-mono leading-none text-accent-cyan"
             style={{ 
               left: `${(i / columns) * 100}%`,
+              maskImage: 'linear-gradient(to bottom, transparent, black 70%, white 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 70%, white 100%)'
             }}
           >
             <motion.div
-              animate={{ y: ["0%", "250%"] }}
+              animate={{ y: ["0%", "300%"] }}
               transition={{ 
                 duration, 
                 repeat: Infinity, 
                 delay, 
                 ease: "linear" 
               }}
-              className="flex flex-col"
+              className="flex flex-col text-center drop-shadow-[0_0_5px_#00ffff]"
+              style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', width: '20px' }}
             >
-              {columnContent.map((char, j) => (
-                <span 
-                  key={j} 
-                  className={`${j === columnContent.length - 1 ? "text-white shadow-[0_0_10px_#fff] opacity-100" : "text-accent-cyan opacity-40"}`}
-                  style={{ opacity: (j / columnContent.length) * 0.5 }}
-                >
-                  {char}
-                </span>
-              ))}
+              {columnContent}
             </motion.div>
           </div>
         );
@@ -159,7 +154,7 @@ const Loader = () => {
         }
         return prev + 1;
       });
-    }, 25);
+    }, 15);
     return () => clearInterval(timer);
   }, []);
 
@@ -168,8 +163,8 @@ const Loader = () => {
       initial={{ opacity: 1 }}
       exit={{ 
         opacity: 0,
-        filter: "blur(30px)",
-        transition: { duration: 1, ease: "easeInOut" }
+        scale: 1.05,
+        transition: { duration: 0.8, ease: "easeInOut" }
       }}
       className="fixed inset-0 z-[200] bg-primary flex flex-col items-center justify-center p-6 overflow-hidden"
     >

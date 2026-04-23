@@ -55,7 +55,7 @@ const TechChip = ({ tech, index, rotation, total }) => {
   }, []);
 
   const isMobile = windowWidth < 768;
-  const radius = isMobile ? 140 : 320;
+  const radius = isMobile ? 120 : 320;
   const angle = (index * (360 / total)) * (Math.PI / 180);
   const x = Math.cos(angle) * radius;
   const y = Math.sin(angle) * radius;
@@ -153,8 +153,8 @@ const Tech = () => {
         <div 
           className="absolute rounded-full overflow-hidden"
           style={{ 
-            width: isMobile ? '300px' : '800px', 
-            height: isMobile ? '300px' : '800px',
+            width: isMobile ? '260px' : '800px', 
+            height: isMobile ? '260px' : '800px',
             transform: `rotate(${rotation}deg)` 
           }}
         >

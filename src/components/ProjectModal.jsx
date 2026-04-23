@@ -48,7 +48,7 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
             </button>
 
             {/* Left Panel: Visual Identity */}
-            <div className="w-full md:w-[40%] relative overflow-hidden bg-black/40 border-r border-white/5 flex flex-col p-12">
+            <div className="w-full md:w-[40%] relative overflow-hidden bg-black/40 border-r border-white/5 flex flex-col p-6 md:p-12">
               <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div className="w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(0,255,255,0.1)_0,transparent_50%)]" />
               </div>
@@ -111,7 +111,7 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
               {/* Scrollable Content Area */}
               <div 
                 data-lenis-prevent
-                className="flex-1 overflow-y-auto custom-scrollbar p-12"
+                className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12"
               >
                 <AnimatePresence mode="wait">
                   {activeTab === "overview" && (
@@ -205,7 +205,7 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
               </div>
 
               {/* Action Bar */}
-              <div className="p-8 bg-black/40 border-t border-white/5 flex gap-4">
+              <div className="p-6 md:p-8 bg-black/40 border-t border-white/5 flex gap-4">
                 <MagneticButton 
                   className="flex-1 !py-6 bg-accent-cyan text-black border-none font-black uppercase tracking-[4px] text-xs shadow-neon-cyan hover:scale-[1.02] transition-transform"
                   onClick={() => window.open(project.hosted_link, "_blank")}
