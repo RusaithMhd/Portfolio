@@ -104,6 +104,17 @@ const allItems = categories
 const LogosModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("all");
 
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const currentItems =
     activeTab === "all"
       ? allItems
@@ -129,7 +140,7 @@ const LogosModal = ({ isOpen, onClose }) => {
             initial={{ scale: 0.9, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 50 }}
-            className="relative w-full max-w-7xl max-h-[92vh] glass-card rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#080808] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)]"
+            className="relative w-full max-w-7xl h-[92vh] glass-card rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#080808] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)]"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 md:p-8 border-b border-white/5 bg-black/40 flex-shrink-0">

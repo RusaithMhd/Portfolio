@@ -64,8 +64,8 @@ const About = () => {
       <div className="absolute -top-20 lg:-left-20 left-1/2 -translate-x-1/2 lg:translate-x-0 w-72 h-72 md:w-96 md:h-96 bg-accent-cyan/5 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center lg:items-start justify-center">
-        <div className="flex-[1.2] w-full">
-          <motion.div variants={textVariant()} className="relative">
+        <div className="flex-[1.2] w-full flex flex-col items-center lg:items-start text-center lg:text-left">
+          <motion.div variants={textVariant()} className="relative w-full">
             <p className={styles.sectionSubText}>Accessing Identity Arch...</p>
             <h2 className={`${styles.sectionHeadText} leading-tight`}>System Origin.</h2>
             
@@ -76,31 +76,32 @@ const About = () => {
               className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent-cyan/40 to-transparent pointer-events-none z-20"
             />
           </motion.div>
-
+ 
           <motion.div
             variants={fadeIn("", "", 0.1, 1)}
-            className="mt-10 space-y-8"
+            className="mt-10 space-y-8 w-full flex flex-col items-center lg:items-start"
           >
-            <div className="relative p-8 rounded-[2rem] bg-white/[0.01] border border-white/5 overflow-hidden group">
-              <div className="absolute top-0 left-0 w-2 h-full bg-accent-cyan/20" />
-              <p className="text-white/70 text-[20px] md:text-[22px] max-w-3xl leading-[42px] font-medium italic">
+            <div className="relative p-8 rounded-[2rem] bg-white/[0.01] border border-white/5 overflow-hidden group w-full">
+              <div className="absolute top-0 left-0 w-2 h-full bg-accent-cyan/20 lg:block hidden" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-accent-cyan/20 lg:hidden block" />
+              <p className="text-white/70 text-[20px] md:text-[22px] max-w-3xl leading-[42px] font-medium italic mx-auto lg:mx-0">
                 "Bridging the gap between <span className="text-accent-cyan font-black not-italic">high-impact aesthetics</span> and <span className="text-accent-purple font-black not-italic">technical precision</span>. Every pixel is a protocol; every line of code is a signature."
               </p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+ 
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mx-auto lg:mx-0">
               <StatusModule label="Clearance" value="Level 09 / Admin" icon={FiShield} colorClass="text-accent-cyan" shadowClass="group-hover:shadow-neon-cyan" />
               <StatusModule label="Processing" value="Graphic + Dev" icon={FiZap} colorClass="text-accent-purple" shadowClass="group-hover:shadow-neon-purple" />
               <StatusModule label="Uptime" value="5+ Years Active" icon={FiActivity} colorClass="text-white" shadowClass="" />
               <StatusModule label="Origin" value="Colombo / SL" icon={FiTarget} colorClass="text-white" shadowClass="" />
             </div>
-
-            <div className="flex flex-wrap gap-6 pt-4">
+ 
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 w-full">
               <MagneticButton 
                 onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
-                className="!bg-accent-cyan !text-black border-none uppercase font-black tracking-widest !px-10 !py-5 hover:shadow-neon-cyan transition-all"
+                className="!bg-accent-cyan !text-black border-none uppercase font-black tracking-widest !px-10 !py-5 hover:shadow-neon-cyan transition-all w-full sm:w-auto"
               >
-                <div className="flex items-center gap-3 whitespace-nowrap">
+                <div className="flex items-center justify-center gap-3 whitespace-nowrap">
                   Initialize Uplink <FiShield className="group-hover:rotate-12 transition-transform text-xl" />
                 </div>
               </MagneticButton>

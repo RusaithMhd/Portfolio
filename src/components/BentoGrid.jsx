@@ -1,144 +1,101 @@
-import React, { useState, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { projects } from "../constants";
 import { fadeIn } from "../utils/motion";
 import ProjectModal from "./ProjectModal";
 import LogosModal from "./LogosModal";
-import { 
-  FiShoppingCart, FiTrello, FiBox, FiExternalLink, 
-  FiMonitor, FiCpu, FiTarget, FiActivity, FiShield, FiBarChart2, FiLayers
+import {
+  FiShoppingCart, FiTrello, FiBox, FiExternalLink, FiEye,
+  FiMonitor, FiCpu, FiTarget, FiLayers, FiArrowRight
 } from "react-icons/fi";
 
-
 const iconMap = {
-  FiShoppingCart: FiShoppingCart,
-  FiTrello: FiTrello,
-  FiBox: FiBox,
-  FiMonitor: FiMonitor,
-  FiCpu: FiCpu,
-  FiTarget: FiTarget,
+  FiShoppingCart,
+  FiTrello,
+  FiBox,
+  FiMonitor,
+  FiCpu,
+  FiTarget,
 };
 
 const ProjectCard = ({ index, project, onClick }) => {
   const Icon = iconMap[project.icon] || FiBox;
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
-
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const isFeatured = index === 0;
 
   return (
     <motion.div
       variants={fadeIn("up", "spring", index * 0.1, 0.75)}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`relative h-full glass-card overflow-hidden group cursor-pointer p-6 md:p-8 flex flex-col justify-between border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40 ${
-        index === 0 ? "md:col-span-2" : ""
+      className={`relative glass-card overflow-hidden group flex flex-col border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40 hover:shadow-neon-cyan ${
+        isFeatured ? "md:col-span-2" : ""
       }`}
-      onClick={onClick}
     >
-      {/* Holographic Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/5 via-transparent to-accent-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity pointer-events-none">
-        <div className="w-full h-full bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-      </div>
+      {/* Top gradient accent */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-accent-cyan via-accent-purple to-transparent" />
 
-      <div className="relative z-10 translate-z-10">
-        <div className="flex justify-between items-start mb-10">
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/5 via-transparent to-accent-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+      {/* Card Body */}
+      <div className="flex flex-col flex-1 p-6 md:p-8 gap-5 relative z-10">
+
+        {/* Header row: Icon + Badge */}
+        <div className="flex items-start justify-between">
           <div className="relative">
             <div className="absolute -inset-2 bg-accent-cyan/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-accent-cyan/40 transition-all duration-500 relative">
-              <Icon className="text-3xl text-accent-cyan group-hover:scale-110 transition-transform filter drop-shadow-neon-cyan" />
+            <div className="w-14 h-14 rounded-2xl bg-accent-cyan/5 flex items-center justify-center border border-accent-cyan/10 group-hover:border-accent-cyan/40 group-hover:bg-accent-cyan/10 transition-all duration-500 relative">
+              <Icon className="text-2xl text-accent-cyan group-hover:scale-110 transition-transform drop-shadow-sm" />
             </div>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <span className="text-[8px] text-white/20 font-mono tracking-widest uppercase">Project_ID</span>
-            <span className="text-[10px] text-accent-cyan font-black tracking-widest uppercase">0x{index.toString(16).padStart(2, '0')}</span>
-          </div>
+          {isFeatured && (
+            <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20">
+              Featured
+            </span>
+          )}
         </div>
 
-        <h3 className="text-white text-3xl font-black uppercase tracking-tighter mb-4 group-hover:text-accent-cyan transition-colors">
-          {project.name}
-        </h3>
-        <p className="text-secondary text-[15px] line-clamp-2 max-w-md opacity-40 group-hover:opacity-100 transition-opacity leading-relaxed font-medium">
-          {project.description}
-        </p>
-
-        {/* Tactical Analysis Stats */}
-        <div className="mt-8 flex gap-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <FiActivity className="text-[10px] text-accent-cyan" />
-              <span className="text-[8px] text-white/40 font-black uppercase tracking-widest">Perf</span>
-            </div>
-            <span className="text-[10px] text-white font-mono">98%</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <FiShield className="text-[10px] text-accent-purple" />
-              <span className="text-[8px] text-white/40 font-black uppercase tracking-widest">Sec</span>
-            </div>
-            <span className="text-[10px] text-white font-mono">Verified</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <FiBarChart2 className="text-[10px] text-accent-cyan" />
-              <span className="text-[8px] text-white/40 font-black uppercase tracking-widest">Score</span>
-            </div>
-            <span className="text-[10px] text-white font-mono">A+</span>
-          </div>
+        {/* Title */}
+        <div>
+          <h3 className="text-white text-xl md:text-2xl font-black uppercase tracking-tight leading-tight mb-2 group-hover:text-accent-cyan transition-colors">
+            {project.name}
+          </h3>
+          {/* Description — always visible, not hidden */}
+          <p className="text-secondary text-[13px] leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity line-clamp-3">
+            {project.description}
+          </p>
         </div>
-      </div>
 
-      <div className="relative z-10 flex flex-col gap-6 mt-10">
+        {/* Tags */}
         <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
+          {project.tags.slice(0, 4).map((tag) => (
             <span
               key={`${project.name}-${tag.name}`}
-              className="text-[9px] font-black font-mono text-accent-cyan/60 bg-accent-cyan/5 border border-accent-cyan/10 px-3 py-1 rounded-sm uppercase tracking-widest"
+              className="text-[10px] font-bold font-mono text-accent-cyan/70 bg-accent-cyan/5 border border-accent-cyan/10 px-2.5 py-1 rounded-md uppercase tracking-wider"
             >
-              #{tag.name}
+              {tag.name}
             </span>
           ))}
         </div>
-        
-        <div className="flex items-center justify-between pt-6 border-t border-white/5">
-          <span className="text-[10px] text-white/20 font-mono tracking-widest uppercase">Sector_0{index + 1}</span>
-          <div className="flex items-center gap-2 group/btn">
-            <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[3px] opacity-0 group-hover:opacity-100 transition-opacity">Initialize</span>
-            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:bg-accent-cyan/10 group-hover:border-accent-cyan/40 transition-all">
-              <FiExternalLink className="text-white/20 group-hover:text-accent-cyan transition-colors" />
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Dynamic Scan Line */}
-      <motion.div 
+      {/* Footer: Always-visible CTA */}
+      <div className="relative z-10 px-6 md:px-8 pb-6 border-t border-white/5 pt-4 flex items-center justify-between gap-4">
+        <span className="text-[11px] text-white/30 font-mono uppercase tracking-widest">
+          Click to view details
+        </span>
+        <button
+          onClick={onClick}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-cyan text-black text-[11px] font-black uppercase tracking-widest hover:shadow-neon-cyan transition-all group/btn"
+        >
+          View Project
+          <FiArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
+        </button>
+      </div>
+
+      {/* Scan line animation */}
+      <motion.div
         animate={{ top: ["-100%", "200%"] }}
         transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 w-full h-20 bg-gradient-to-b from-transparent via-accent-cyan/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
+        className="absolute left-0 w-full h-16 bg-gradient-to-b from-transparent via-accent-cyan/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
       />
     </motion.div>
   );
@@ -156,9 +113,9 @@ const BentoGrid = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[400px] md:auto-rows-[450px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto">
         {projects.map((project, index) => (
-          <ProjectCard 
+          <ProjectCard
             key={`project-${index}`}
             index={index}
             project={project}
@@ -169,68 +126,70 @@ const BentoGrid = () => {
         {/* Freelance Logos Card */}
         <motion.div
           variants={fadeIn("up", "spring", projects.length * 0.1, 0.75)}
-          className="relative glass-card overflow-hidden group cursor-pointer p-6 md:p-8 flex flex-col justify-between border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40"
-          onClick={() => setIsLogosModalOpen(true)}
+          className="relative glass-card overflow-hidden group flex flex-col border-white/5 hover:border-accent-purple/30 transition-all duration-500 bg-black/40 hover:shadow-neon-purple"
         >
-          {/* Holographic Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/5 via-transparent to-accent-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity pointer-events-none">
-            <div className="w-full h-full bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-          </div>
+          {/* Top accent */}
+          <div className="h-[2px] w-full bg-gradient-to-r from-accent-purple via-accent-cyan to-transparent" />
 
-          <div className="relative z-10">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-8">
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/5 via-transparent to-accent-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+          {/* Body */}
+          <div className="flex flex-col flex-1 p-6 md:p-8 gap-5 relative z-10">
+            <div className="flex items-start justify-between">
               <div className="relative">
-                <div className="absolute -inset-2 bg-accent-cyan/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-accent-cyan/40 transition-all duration-500 relative">
-                  <FiLayers className="text-3xl text-accent-cyan group-hover:scale-110 transition-transform filter drop-shadow-neon-cyan" />
+                <div className="absolute -inset-2 bg-accent-purple/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-14 h-14 rounded-2xl bg-accent-purple/5 flex items-center justify-center border border-accent-purple/10 group-hover:border-accent-purple/40 group-hover:bg-accent-purple/10 transition-all duration-500 relative">
+                  <FiLayers className="text-2xl text-accent-purple group-hover:scale-110 transition-transform" />
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-1">
-                <span className="text-[8px] text-white/20 font-mono tracking-widest uppercase">Project_ID</span>
-                <span className="text-[10px] text-accent-cyan font-black tracking-widest uppercase">0x{(projects.length).toString(16).padStart(2, '0')}</span>
-              </div>
+              <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-accent-purple/10 text-accent-purple border border-accent-purple/20">
+                Freelance
+              </span>
             </div>
 
-            <h3 className="text-white text-3xl font-black uppercase tracking-tighter mb-4 group-hover:text-accent-cyan transition-colors">
-              Freelance
-            </h3>
-            <p className="text-secondary text-[15px] opacity-40 group-hover:opacity-100 transition-opacity leading-relaxed font-medium">
-              A collection of logos, posters, branding, invitations, and menu designs created for real clients.
-            </p>
-          </div>
+            <div>
+              <h3 className="text-white text-xl md:text-2xl font-black uppercase tracking-tight leading-tight mb-2 group-hover:text-accent-purple transition-colors">
+                Design Work
+              </h3>
+              <p className="text-secondary text-[13px] leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity line-clamp-3">
+                A collection of logos, posters, branding, invitations, and menu designs created for real clients.
+              </p>
+            </div>
 
-          {/* Card Footer */}
-          <div className="relative z-10 mt-auto">
-            <div className="flex flex-wrap gap-2 mb-6">
-              {["logos", "branding", "posters", "invitations", "menu"].map((tag) => (
-                <span key={tag} className="text-[9px] font-black font-mono text-accent-cyan/60 bg-accent-cyan/5 border border-accent-cyan/10 px-3 py-1 rounded-sm uppercase tracking-widest">
-                  #{tag}
+            <div className="flex flex-wrap gap-2">
+              {["Logos", "Branding", "Posters", "Menus"].map((tag) => (
+                <span key={tag} className="text-[10px] font-bold font-mono text-accent-purple/70 bg-accent-purple/5 border border-accent-purple/10 px-2.5 py-1 rounded-md uppercase tracking-wider">
+                  {tag}
                 </span>
               ))}
             </div>
-            <div className="flex items-center justify-between pt-6 border-t border-white/5">
-              <span className="text-[10px] text-white/20 font-mono tracking-widest uppercase">Sector_0{projects.length + 1}</span>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[3px] opacity-0 group-hover:opacity-100 transition-opacity">Open Archive</span>
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:bg-accent-cyan/10 group-hover:border-accent-cyan/40 transition-all">
-                  <FiExternalLink className="text-white/20 group-hover:text-accent-cyan transition-colors" />
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Scan Line */}
-          <motion.div 
+          {/* Footer */}
+          <div className="relative z-10 px-6 md:px-8 pb-6 border-t border-white/5 pt-4 flex items-center justify-between gap-4">
+            <span className="text-[11px] text-white/30 font-mono uppercase tracking-widest">
+              Click to browse
+            </span>
+            <button
+              onClick={() => setIsLogosModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-purple text-white text-[11px] font-black uppercase tracking-widest hover:shadow-neon-purple transition-all group/btn"
+            >
+              Browse Work
+              <FiArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
+            </button>
+          </div>
+
+          {/* Scan line */}
+          <motion.div
             animate={{ top: ["-100%", "200%"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute left-0 w-full h-20 bg-gradient-to-b from-transparent via-accent-cyan/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
+            className="absolute left-0 w-full h-16 bg-gradient-to-b from-transparent via-accent-purple/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
           />
         </motion.div>
       </div>
 
-      <ProjectModal 
+      <ProjectModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         project={selectedProject}
