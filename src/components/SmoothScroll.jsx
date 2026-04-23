@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
+// Expose the lenis instance globally so other components (like modals) can pause/resume it
+let lenisInstance = null;
+
+export const getLenis = () => lenisInstance;
+export const pauseLenis = () => lenisInstance?.stop();
+export const resumeLenis = () => lenisInstance?.start();
+
 const SmoothScroll = ({ children }) => {
   useEffect(() => {
     const lenis = new Lenis({
@@ -15,6 +22,8 @@ const SmoothScroll = ({ children }) => {
       infinite: false,
     });
 
+    lenisInstance = lenis;
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -22,7 +31,6 @@ const SmoothScroll = ({ children }) => {
 
     requestAnimationFrame(raf);
 
-    // Update Lenis on window resize
     const handleResize = () => {
       lenis.resize();
     };
@@ -30,6 +38,7 @@ const SmoothScroll = ({ children }) => {
 
     return () => {
       lenis.destroy();
+      lenisInstance = null;
       window.removeEventListener("resize", handleResize);
     };
   }, []);

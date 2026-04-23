@@ -1,221 +1,271 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import MagneticButton from "./MagneticButton";
-import { FiShoppingCart, FiTrello, FiBox, FiArrowRight, FiActivity, FiShield, FiCpu } from "react-icons/fi";
+import { pauseLenis, resumeLenis } from "./SmoothScroll";
+import {
+  FiShoppingCart, FiTrello, FiBox, FiMonitor, FiCpu, FiTarget,
+  FiX, FiCode, FiCheckCircle, FiLayers, FiInfo, FiGlobe
+} from "react-icons/fi";
 
 const iconMap = {
-  FiShoppingCart: FiShoppingCart,
-  FiTrello: FiTrello,
-  FiBox: FiBox,
+  FiShoppingCart, FiTrello, FiBox, FiMonitor, FiCpu, FiTarget,
 };
 
 const ProjectModal = ({ isOpen, onClose, project }) => {
-  const [activeTab, setActiveTab] = React.useState("overview");
+  const [activeTab, setActiveTab] = React.useState("about");
+
+  // Lock / unlock Lenis & body scroll
+  useEffect(() => {
+    if (isOpen) {
+      pauseLenis();
+      document.body.style.overflow = "hidden";
+      setActiveTab("about");
+    } else {
+      resumeLenis();
+      document.body.style.overflow = "";
+    }
+    return () => {
+      resumeLenis();
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    if (isOpen) window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
+
   if (!project) return null;
   const Icon = iconMap[project.icon] || FiBox;
+  const hasLiveLink = project.hosted_link && project.hosted_link !== "#";
 
   const tabs = [
-    { id: "overview", label: "Strategic Overview", icon: FiActivity },
-    { id: "stack", label: "Neural Stack", icon: FiCpu },
-    { id: "specs", label: "System Specs", icon: FiShield },
+    { id: "about",   label: "About",        icon: FiInfo },
+    { id: "tech",    label: "Tech Stack",    icon: FiCode },
+    { id: "details", label: "Project Info",  icon: FiLayers },
   ];
 
   const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-10 pointer-events-none">
+        // Full-screen positioner — does NOT scroll
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8">
+
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-primary/95 backdrop-blur-3xl pointer-events-auto"
+            className="absolute inset-0 bg-black/85 backdrop-blur-xl"
           />
 
+          {/* Modal shell — fixed height so inner area can scroll */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 50 }}
+            initial={{ scale: 0.92, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 50 }}
-            className="relative w-full max-w-7xl h-full max-h-[92vh] glass-card rounded-[2.5rem] overflow-hidden border border-white/5 flex flex-col md:flex-row bg-[#080808] pointer-events-auto shadow-[0_0_100px_rgba(0,0,0,1)]"
+            exit={{ scale: 0.92, opacity: 0, y: 30 }}
+            transition={{ type: "spring", stiffness: 260, damping: 22 }}
+            className="relative w-full max-w-4xl bg-[#0e0e10] border border-white/10 rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.9)] flex flex-col"
+            // Constrained height — inner content scrolls inside this box
+            style={{ maxHeight: "min(90vh, 700px)" }}
           >
-            {/* Close Button */}
-            <button 
-              onClick={onClose}
-              className="absolute top-6 right-6 w-10 h-10 glass rounded-full flex items-center justify-center z-[60] hover:bg-white/10 transition-all border-white/10 text-white"
-            >
-              ✕
-            </button>
+            {/* ── TOP ACCENT ─────────────────────────────────────────── */}
+            <div className="h-[2px] w-full bg-gradient-to-r from-accent-cyan via-accent-purple to-transparent flex-shrink-0 rounded-t-3xl" />
 
-            {/* Left Panel: Visual Identity */}
-            <div className="w-full md:w-[40%] relative overflow-hidden bg-black/40 border-r border-white/5 flex flex-col p-6 md:p-12">
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                <div className="w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(0,255,255,0.1)_0,transparent_50%)]" />
+            {/* ── HEADER (never scrolls) ──────────────────────────────── */}
+            <div className="flex items-start gap-4 p-5 md:p-7 border-b border-white/5 flex-shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/20 flex-shrink-0 shadow-neon-cyan">
+                <Icon className="text-xl text-accent-cyan" />
               </div>
-              
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-[1px] bg-accent-cyan" />
-                  <span className="text-[10px] text-accent-cyan font-black uppercase tracking-[5px]">Project Briefing</span>
-                </div>
 
-                <h2 className="text-6xl font-black text-white uppercase tracking-tighter mb-6 leading-[0.9]">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight mb-2">
                   {project.name}
                 </h2>
-                
-                <div className="flex flex-wrap gap-2 mb-12">
+                <div className="flex flex-wrap gap-1.5">
                   {project.tags.map((tag) => (
-                    <span key={tag.name} className="px-3 py-1 bg-white/5 border border-white/5 rounded-sm text-[9px] font-black font-mono text-white/40 uppercase tracking-widest">
-                      #{tag.name}
+                    <span
+                      key={tag.name}
+                      className="text-[10px] font-bold font-mono text-accent-cyan/70 bg-accent-cyan/5 border border-accent-cyan/15 px-2 py-0.5 rounded-md uppercase tracking-wider"
+                    >
+                      {tag.name}
                     </span>
                   ))}
                 </div>
-
-                <div className="mt-auto relative group">
-                  <div className="absolute -inset-10 bg-accent-cyan/5 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <Icon className="text-[15rem] text-white/[0.02] group-hover:text-accent-cyan/[0.05] transition-all duration-700" />
-                  <div className="absolute bottom-0 left-0 space-y-4">
-                    <div className="flex flex-col">
-                      <span className="text-[8px] text-white/20 font-mono tracking-widest uppercase mb-1">Status Report</span>
-                      <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
-                        <span className="text-xs font-black text-white/60 tracking-widest uppercase">Uplink Stable</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
+
+              <button
+                onClick={onClose}
+                className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all border border-white/10 text-white/50 hover:text-white flex-shrink-0"
+                aria-label="Close"
+              >
+                <FiX />
+              </button>
             </div>
 
-            {/* Right Panel: Content & Interaction */}
-            <div className="flex-1 flex flex-col bg-white/[0.01]">
-              {/* Navigation Tabs */}
-              <div className="flex border-b border-white/5 p-2 bg-black/20">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 flex items-center justify-center gap-3 py-4 text-[10px] font-black uppercase tracking-[3px] transition-all relative ${
-                      activeTab === tab.id ? "text-accent-cyan" : "text-white/30 hover:text-white/60"
-                    }`}
-                  >
-                    <tab.icon className="text-sm" />
-                    {tab.label}
-                    {activeTab === tab.id && (
-                      <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 w-full h-[1px] bg-accent-cyan shadow-neon-cyan" />
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              {/* Scrollable Content Area */}
-              <div 
-                data-lenis-prevent
-                className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12"
-              >
-                <AnimatePresence mode="wait">
-                  {activeTab === "overview" && (
+            {/* ── TABS (never scrolls) ────────────────────────────────── */}
+            <div className="flex border-b border-white/5 bg-black/20 flex-shrink-0 px-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all relative whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? "text-accent-cyan"
+                      : "text-white/30 hover:text-white/60"
+                  }`}
+                >
+                  <tab.icon className="text-sm" />
+                  {tab.label}
+                  {activeTab === tab.id && (
                     <motion.div
-                      key="overview"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      className="space-y-12"
-                    >
-                      <div className="space-y-6">
-                        <h4 className="text-white text-3xl font-black uppercase tracking-tighter">Mission Statement</h4>
-                        <p className="text-secondary text-lg leading-relaxed font-medium opacity-80">
-                          {project.fullDescription || project.description}
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-8 py-10 border-y border-white/5">
-                        <div className="space-y-2">
-                          <span className="text-[9px] text-white/20 font-black uppercase tracking-[3px]">Integrity Check</span>
-                          <div className="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: "94%" }} className="h-full bg-accent-cyan shadow-neon-cyan" />
-                          </div>
-                          <span className="text-[10px] text-accent-cyan font-mono">94.8% OPTIMIZED</span>
-                        </div>
-                        <div className="space-y-2 text-right">
-                          <span className="text-[9px] text-white/20 font-black uppercase tracking-[3px]">Security Level</span>
-                          <p className="text-white font-black tracking-widest uppercase">Class-A Admin</p>
-                        </div>
-                      </div>
-
-                      <div className="space-y-6">
-                        <h4 className="text-white/40 text-[10px] font-black uppercase tracking-[5px]">Core Objectives</h4>
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {(project.objectives || ["Responsive Integration", "Neural Rendering", "Encrypted Data Bus", "Cloud Synchronization"]).map((obj, i) => (
-                            <li key={i} className="flex items-center gap-4 p-4 glass-morphism border-white/5 bg-white/[0.01] rounded-xl">
-                              <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />
-                              <span className="text-xs font-black text-white/60 uppercase tracking-widest">{obj}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </motion.div>
+                      layoutId="modal-tab-line"
+                      className="absolute bottom-0 left-0 w-full h-[2px] bg-accent-cyan shadow-neon-cyan"
+                    />
                   )}
+                </button>
+              ))}
+            </div>
 
-                  {activeTab === "stack" && (
-                    <motion.div
-                      key="stack"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                    >
-                      {(project.stackDetails || project.tags).map((tag, i) => (
-                        <div key={i} className="p-8 glass-morphism border-white/5 bg-white/[0.01] rounded-[2rem] flex flex-col gap-4 group hover:border-accent-cyan/40 transition-all">
-                          <div className="flex items-center justify-between">
-                            <FiCpu className="text-2xl text-accent-cyan opacity-40 group-hover:opacity-100 transition-opacity" />
-                            <span className="text-[10px] font-mono text-white/20">MODULE_0{i + 1}</span>
+            {/* ── SCROLLABLE CONTENT AREA ─────────────────────────────── */}
+            {/* data-lenis-prevent tells Lenis to ignore wheel events here */}
+            <div
+              data-lenis-prevent
+              className="modal-scroll flex-1 overflow-y-auto overscroll-contain min-h-0 p-5 md:p-7"
+              style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(34,211,238,0.2) transparent" }}
+            >
+              <AnimatePresence mode="wait">
+
+                {/* ABOUT */}
+                {activeTab === "about" && (
+                  <motion.div
+                    key="about"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-6"
+                  >
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                        About this Project
+                      </p>
+                      <p className="text-secondary text-[15px] leading-relaxed">
+                        {project.fullDescription || project.description}
+                      </p>
+                    </div>
+
+                    {project.objectives && (
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                          Key Deliverables
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {project.objectives.map((obj, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-accent-cyan/20 transition-all"
+                            >
+                              <FiCheckCircle className="text-accent-cyan flex-shrink-0" />
+                              <span className="text-sm text-white/70 font-medium">{obj}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* TECH STACK */}
+                {activeTab === "tech" && (
+                  <motion.div
+                    key="tech"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-3"
+                  >
+                    <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                      Technologies Used
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {(project.stackDetails || project.tags).map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-accent-cyan/20 hover:bg-accent-cyan/[0.02] transition-all group"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent-cyan/20 transition-colors">
+                            <FiCode className="text-accent-cyan" />
                           </div>
-                          <h5 className="text-2xl font-black text-white uppercase tracking-tighter group-hover:text-accent-cyan transition-colors">{tag.name}</h5>
-                          <p className="text-xs text-secondary opacity-60 leading-relaxed">{tag.description || `Integrated as a core architectural module for high-performance ${tag.name} data processing.`}</p>
+                          <div>
+                            <h4 className="text-white font-black text-sm mb-1 group-hover:text-accent-cyan transition-colors">
+                              {item.name}
+                            </h4>
+                            <p className="text-secondary text-xs leading-relaxed opacity-60">
+                              {item.description || `Used for building and enhancing the ${item.name} layer.`}
+                            </p>
+                          </div>
                         </div>
                       ))}
-                    </motion.div>
-                  )}
+                    </div>
+                  </motion.div>
+                )}
 
-                  {activeTab === "specs" && (
-                    <motion.div
-                      key="specs"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      className="space-y-8"
-                    >
-                      <div className="p-10 glass-morphism border-white/5 bg-black/40 rounded-[2.5rem] space-y-8">
-                        {(project.specs || [
-                          { label: "Runtime Environment", value: "React Global Net" },
-                          { label: "Data Integrity", value: "Verified SHA-256" },
-                          { label: "Neural Response", value: "< 120ms" },
-                          { label: "System Uptime", value: "99.99%" }
-                        ]).map((spec, i) => (
-                          <div key={i} className="flex items-center justify-between border-b border-white/5 pb-6 last:border-0 last:pb-0">
-                            <span className="text-[10px] text-white/30 font-black uppercase tracking-[3px]">{spec.label}</span>
-                            <span className="text-sm font-black text-white tracking-widest uppercase">{spec.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                {/* PROJECT INFO */}
+                {activeTab === "details" && (
+                  <motion.div
+                    key="details"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-3"
+                  >
+                    <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                      Project Details
+                    </p>
+                    <div className="rounded-2xl border border-white/5 overflow-hidden divide-y divide-white/5">
+                      {(project.specs || []).map((spec, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between px-5 py-4 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+                        >
+                          <span className="text-sm text-white/40 font-medium">{spec.label}</span>
+                          <span className="text-sm font-black text-white tracking-wide">{spec.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
 
-              {/* Action Bar */}
-              <div className="p-6 md:p-8 bg-black/40 border-t border-white/5 flex gap-4">
-                <MagneticButton 
-                  className="flex-1 !py-6 bg-accent-cyan text-black border-none font-black uppercase tracking-[4px] text-xs shadow-neon-cyan hover:scale-[1.02] transition-transform"
-                  onClick={() => window.open(project.hosted_link, "_blank")}
+              </AnimatePresence>
+            </div>
+
+            {/* ── FOOTER CTA (never scrolls) ──────────────────────────── */}
+            <div className="flex-shrink-0 px-5 md:px-7 py-4 bg-black/40 border-t border-white/5 flex flex-col sm:flex-row gap-3 rounded-b-3xl">
+              {hasLiveLink ? (
+                <a
+                  href={project.hosted_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-accent-cyan text-black font-black text-sm uppercase tracking-widest hover:shadow-neon-cyan transition-all"
                 >
-                  Launch Operations
-                </MagneticButton>
-                <MagneticButton className="flex-[0.5] !py-6 glass border-white/10 text-white/60 font-black uppercase tracking-[4px] text-[10px] hover:bg-white/5 hover:text-white transition-all">
-                  Access Code
-                </MagneticButton>
-              </div>
+                  <FiGlobe />
+                  View Live Site
+                </a>
+              ) : (
+                <div className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-white/5 text-white/25 font-black text-sm uppercase tracking-widest border border-white/5 select-none">
+                  <FiGlobe />
+                  Not Publicly Live
+                </div>
+              )}
+              <button
+                onClick={onClose}
+                className="sm:w-auto px-6 py-3 rounded-xl border border-white/10 text-white/50 hover:text-white hover:bg-white/5 font-black text-sm uppercase tracking-widest transition-all"
+              >
+                Close
+              </button>
             </div>
           </motion.div>
         </div>

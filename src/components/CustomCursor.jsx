@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
 
+// Custom cursor is only useful on pointer devices (desktop)
+const isTouchDevice = () =>
+  typeof window !== "undefined" &&
+  (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window);
+
 const CustomCursor = () => {
+  const [visible, setVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
   // Main cursor
