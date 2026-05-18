@@ -131,8 +131,9 @@ const LogosModal = ({ isOpen, onClose }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="absolute inset-0 bg-primary/95 backdrop-blur-3xl"
+            className="absolute inset-0 bg-black/85 backdrop-blur-xl"
           />
 
           {/* Modal */}
@@ -140,45 +141,45 @@ const LogosModal = ({ isOpen, onClose }) => {
             initial={{ scale: 0.9, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 50 }}
-            className="relative w-full max-w-7xl h-[92vh] glass-card rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#080808] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)]"
+            className="relative w-full max-w-7xl h-[92vh] bg-[#050507] rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 md:p-8 border-b border-white/5 bg-black/40 flex-shrink-0">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent-cyan/5 border border-accent-cyan/20 flex items-center justify-center">
-                  <FiLayers className="text-accent-cyan text-xl" />
+            <div className="flex items-center justify-between p-5 md:p-8 border-b border-white/5 bg-white/[0.02] flex-shrink-0">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg">
+                  <FiLayers className="text-white/80 text-2xl" />
                 </div>
                 <div>
-                  <p className="text-[9px] text-accent-cyan/60 font-black uppercase tracking-[4px] mb-0.5">Creative Archive</p>
-                  <h3 className="text-white text-xl md:text-2xl font-black uppercase tracking-tighter">Freelance Works</h3>
+                  <p className="text-[10px] text-white/40 font-medium uppercase tracking-[4px] mb-1">Creative Archive</p>
+                  <h3 className="text-white text-2xl md:text-3xl font-light tracking-wide">Freelance Works</h3>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <span className="text-[9px] text-white/20 font-mono uppercase tracking-widest hidden md:block">
+              <div className="flex items-center gap-6">
+                <span className="text-[10px] text-white/30 font-mono uppercase tracking-widest hidden md:block">
                   © Protected · {totalCount} Assets
                 </span>
                 <button
                   onClick={onClose}
-                  className="w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-all border border-white/10 text-white/60 hover:text-white"
+                  className="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-all border border-white/10 text-white/60 hover:text-white"
                 >
-                  <FiX />
+                  <FiX className="text-xl" />
                 </button>
               </div>
             </div>
 
             {/* Tab Bar */}
-            <div className="flex items-center gap-1 px-4 md:px-8 py-3 border-b border-white/5 bg-black/20 overflow-x-auto flex-shrink-0">
+            <div className="flex items-center gap-2 px-5 md:px-8 py-4 border-b border-white/5 bg-white/[0.01] overflow-x-auto flex-shrink-0 no-scrollbar">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveTab(cat.id)}
-                  className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-[2px] whitespace-nowrap transition-all ${activeTab === cat.id
-                      ? "text-accent-cyan bg-accent-cyan/10 border border-accent-cyan/20"
-                      : "text-white/30 hover:text-white/60 border border-transparent"
+                  className={`relative flex items-center gap-3 px-5 py-2.5 rounded-xl text-[11px] font-medium uppercase tracking-widest whitespace-nowrap transition-all ${activeTab === cat.id
+                      ? "text-black bg-white shadow-lg"
+                      : "text-white/40 hover:text-white/80 bg-white/5 hover:bg-white/10"
                     }`}
                 >
                   {cat.label}
-                  <span className={`text-[8px] px-1.5 py-0.5 rounded-sm font-mono ${activeTab === cat.id ? "bg-accent-cyan/20 text-accent-cyan" : "bg-white/5 text-white/20"}`}>
+                  <span className={`text-[9px] px-2 py-0.5 rounded-md font-mono ${activeTab === cat.id ? "bg-black/10 text-black/60" : "bg-white/10 text-white/40"}`}>
                     {cat.id === "all" ? totalCount : cat.count}
                   </span>
                 </button>
@@ -186,7 +187,7 @@ const LogosModal = ({ isOpen, onClose }) => {
             </div>
 
             {/* Grid */}
-            <div data-lenis-prevent className="flex-1 overflow-y-auto p-4 md:p-8">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto p-5 md:p-8 modal-scroll">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -194,8 +195,8 @@ const LogosModal = ({ isOpen, onClose }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className={`grid gap-5 ${activeTab === "logos"
-                      ? "grid-cols-2 sm:grid-cols-3"
+                  className={`grid gap-6 ${activeTab === "logos"
+                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
                       : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                     }`}
                 >
@@ -205,17 +206,19 @@ const LogosModal = ({ isOpen, onClose }) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="flex flex-col gap-2"
+                      className="flex flex-col gap-3 group"
                     >
-                      <ImageProtector
-                        src={item.src}
-                        alt={item.alt}
-                        removeWhiteBg={item.removeBg}
-                        className={`w-full ${activeTab === "logos" ? "h-[160px]" : "h-[220px]"}`}
-                      />
-                      <div className="flex items-center justify-between px-1">
-                        <span className="text-white/60 text-[10px] font-black uppercase tracking-wider truncate">{item.alt}</span>
-                        <span className="text-[8px] text-accent-cyan/50 font-mono uppercase tracking-widest bg-accent-cyan/5 border border-accent-cyan/10 px-2 py-0.5 rounded-sm flex-shrink-0 ml-2">
+                      <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02]">
+                        <ImageProtector
+                          src={item.src}
+                          alt={item.alt}
+                          removeWhiteBg={item.removeBg}
+                          className={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${activeTab === "logos" ? "h-[180px]" : "h-[260px]"}`}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between px-2">
+                        <span className="text-white/80 text-[12px] font-medium tracking-wide truncate">{item.alt}</span>
+                        <span className="text-[9px] text-white/40 font-mono uppercase tracking-widest flex-shrink-0 ml-3">
                           {item.type}
                         </span>
                       </div>
@@ -225,9 +228,9 @@ const LogosModal = ({ isOpen, onClose }) => {
               </AnimatePresence>
 
               {/* Footer */}
-              <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
-                <p className="text-[9px] text-white/20 font-mono uppercase tracking-[3px]">
+              <div className="mt-12 pt-6 border-t border-white/5 flex items-center justify-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                <p className="text-[10px] text-white/30 font-mono uppercase tracking-widest">
                   All assets protected · Right-click & download disabled
                 </p>
               </div>

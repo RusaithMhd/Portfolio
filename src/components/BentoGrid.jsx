@@ -21,33 +21,48 @@ const iconMap = {
 const ProjectCard = ({ index, project, onClick }) => {
   const Icon = iconMap[project.icon] || FiBox;
   const isFeatured = index === 0;
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
   return (
     <motion.div
       variants={fadeIn("up", "spring", index * 0.1, 0.75)}
-      className={`relative glass-card overflow-hidden group flex flex-col border-white/5 hover:border-accent-cyan/30 transition-all duration-500 bg-black/40 hover:shadow-neon-cyan ${
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`relative overflow-hidden group flex flex-col rounded-3xl border border-white/10 hover:border-orange-500/30 transition-all duration-500 bg-white/[0.02] backdrop-blur-md shadow-2xl ${
         isFeatured ? "md:col-span-2" : ""
       }`}
     >
-      {/* Top gradient accent */}
-      <div className="h-[2px] w-full bg-gradient-to-r from-accent-cyan via-accent-purple to-transparent" />
+      {/* Dynamic Gradient Light */}
+      <div 
+        className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(249, 115, 22, 0.08), transparent 40%)`
+        }}
+      />
 
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/5 via-transparent to-accent-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+      {/* Top subtle highlight */}
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
 
       {/* Card Body */}
-      <div className="flex flex-col flex-1 p-6 md:p-8 gap-5 relative z-10">
+      <div className="flex flex-col flex-1 p-8 gap-6 relative z-10">
 
         {/* Header row: Icon + Badge */}
         <div className="flex items-start justify-between">
-          <div className="relative">
-            <div className="absolute -inset-2 bg-accent-cyan/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-14 h-14 rounded-2xl bg-accent-cyan/5 flex items-center justify-center border border-accent-cyan/10 group-hover:border-accent-cyan/40 group-hover:bg-accent-cyan/10 transition-all duration-500 relative">
-              <Icon className="text-2xl text-accent-cyan group-hover:scale-110 transition-transform drop-shadow-sm" />
-            </div>
+          <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-white/30 group-hover:bg-white/10 transition-all duration-500">
+            <Icon className="text-2xl text-white/80 group-hover:scale-110 group-hover:text-white transition-all" />
           </div>
           {isFeatured && (
-            <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20">
+            <span className="px-4 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-widest bg-white/10 text-white border border-white/20">
               Featured
             </span>
           )}
@@ -55,21 +70,20 @@ const ProjectCard = ({ index, project, onClick }) => {
 
         {/* Title */}
         <div>
-          <h3 className="text-white text-xl md:text-2xl font-black uppercase tracking-tight leading-tight mb-2 group-hover:text-accent-cyan transition-colors">
+          <h3 className="text-white text-2xl font-light tracking-wide leading-tight mb-3 group-hover:text-white/90 transition-colors">
             {project.name}
           </h3>
-          {/* Description — always visible, not hidden */}
-          <p className="text-secondary text-[13px] leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity line-clamp-3">
+          <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-opacity line-clamp-3 font-light">
             {project.description}
           </p>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mt-auto">
           {project.tags.slice(0, 4).map((tag) => (
             <span
               key={`${project.name}-${tag.name}`}
-              className="text-[10px] font-bold font-mono text-accent-cyan/70 bg-accent-cyan/5 border border-accent-cyan/10 px-2.5 py-1 rounded-md uppercase tracking-wider"
+              className="text-[10px] font-medium text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full uppercase tracking-wider"
             >
               {tag.name}
             </span>
@@ -77,26 +91,19 @@ const ProjectCard = ({ index, project, onClick }) => {
         </div>
       </div>
 
-      {/* Footer: Always-visible CTA */}
-      <div className="relative z-10 px-6 md:px-8 pb-6 border-t border-white/5 pt-4 flex items-center justify-between gap-4">
-        <span className="text-[11px] text-white/30 font-mono uppercase tracking-widest">
-          Click to view details
+      {/* Footer */}
+      <div className="relative z-10 px-8 pb-8 pt-4 flex items-center justify-between gap-4 mt-auto">
+        <span className="text-[11px] text-white/40 uppercase tracking-widest font-medium">
+          View details
         </span>
         <button
           onClick={onClick}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-cyan text-black text-[11px] font-black uppercase tracking-widest hover:shadow-neon-cyan transition-all group/btn"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-[11px] font-bold uppercase tracking-widest hover:bg-white/90 hover:scale-105 transition-all group/btn"
         >
           View Project
           <FiArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
         </button>
       </div>
-
-      {/* Scan line animation */}
-      <motion.div
-        animate={{ top: ["-100%", "200%"] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 w-full h-16 bg-gradient-to-b from-transparent via-accent-cyan/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
-      />
     </motion.div>
   );
 };
@@ -109,6 +116,16 @@ const BentoGrid = () => {
   const handleProjectClick = (project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
+  };
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
   };
 
   return (
@@ -126,40 +143,43 @@ const BentoGrid = () => {
         {/* Freelance Logos Card */}
         <motion.div
           variants={fadeIn("up", "spring", projects.length * 0.1, 0.75)}
-          className="relative glass-card overflow-hidden group flex flex-col border-white/5 hover:border-accent-purple/30 transition-all duration-500 bg-black/40 hover:shadow-neon-purple"
+          onMouseMove={handleMouseMove}
+          className="relative overflow-hidden group flex flex-col rounded-3xl border border-white/10 hover:border-orange-500/30 transition-all duration-500 bg-white/[0.02] backdrop-blur-md shadow-2xl"
         >
-          {/* Top accent */}
-          <div className="h-[2px] w-full bg-gradient-to-r from-accent-purple via-accent-cyan to-transparent" />
+          {/* Dynamic Gradient Light */}
+          <div 
+            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{
+              background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(249, 115, 22, 0.08), transparent 40%)`
+            }}
+          />
 
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/5 via-transparent to-accent-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          {/* Top highlight */}
+          <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
 
           {/* Body */}
-          <div className="flex flex-col flex-1 p-6 md:p-8 gap-5 relative z-10">
+          <div className="flex flex-col flex-1 p-8 gap-6 relative z-10">
             <div className="flex items-start justify-between">
-              <div className="relative">
-                <div className="absolute -inset-2 bg-accent-purple/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-14 h-14 rounded-2xl bg-accent-purple/5 flex items-center justify-center border border-accent-purple/10 group-hover:border-accent-purple/40 group-hover:bg-accent-purple/10 transition-all duration-500 relative">
-                  <FiLayers className="text-2xl text-accent-purple group-hover:scale-110 transition-transform" />
-                </div>
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-white/30 group-hover:bg-white/10 transition-all duration-500">
+                <FiLayers className="text-2xl text-white/80 group-hover:scale-110 group-hover:text-white transition-transform" />
               </div>
-              <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-accent-purple/10 text-accent-purple border border-accent-purple/20">
+              <span className="px-4 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-widest bg-white/5 text-white/60 border border-white/10">
                 Freelance
               </span>
             </div>
 
             <div>
-              <h3 className="text-white text-xl md:text-2xl font-black uppercase tracking-tight leading-tight mb-2 group-hover:text-accent-purple transition-colors">
+              <h3 className="text-white text-2xl font-light tracking-wide leading-tight mb-3 transition-colors">
                 Design Work
               </h3>
-              <p className="text-secondary text-[13px] leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity line-clamp-3">
+              <p className="text-white/60 text-sm leading-relaxed group-hover:text-white/80 transition-opacity line-clamp-3 font-light">
                 A collection of logos, posters, branding, invitations, and menu designs created for real clients.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mt-auto">
               {["Logos", "Branding", "Posters", "Menus"].map((tag) => (
-                <span key={tag} className="text-[10px] font-bold font-mono text-accent-purple/70 bg-accent-purple/5 border border-accent-purple/10 px-2.5 py-1 rounded-md uppercase tracking-wider">
+                <span key={tag} className="text-[10px] font-medium text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full uppercase tracking-wider">
                   {tag}
                 </span>
               ))}
@@ -167,25 +187,18 @@ const BentoGrid = () => {
           </div>
 
           {/* Footer */}
-          <div className="relative z-10 px-6 md:px-8 pb-6 border-t border-white/5 pt-4 flex items-center justify-between gap-4">
-            <span className="text-[11px] text-white/30 font-mono uppercase tracking-widest">
-              Click to browse
+          <div className="relative z-10 px-8 pb-8 pt-4 flex items-center justify-between gap-4 mt-auto">
+            <span className="text-[11px] text-white/40 uppercase tracking-widest font-medium">
+              Browse work
             </span>
             <button
               onClick={() => setIsLogosModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-purple text-white text-[11px] font-black uppercase tracking-widest hover:shadow-neon-purple transition-all group/btn"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 text-white text-[11px] font-bold uppercase tracking-widest hover:bg-white hover:text-black hover:scale-105 transition-all group/btn border border-white/20 hover:border-white"
             >
               Browse Work
               <FiArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
             </button>
           </div>
-
-          {/* Scan line */}
-          <motion.div
-            animate={{ top: ["-100%", "200%"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute left-0 w-full h-16 bg-gradient-to-b from-transparent via-accent-purple/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100"
-          />
         </motion.div>
       </div>
 

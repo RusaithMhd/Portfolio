@@ -5,8 +5,8 @@ import { personalInfo, experiences, projects } from "../constants";
 const Terminal = () => {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState([
-    { type: "system", content: `Welcome to ${personalInfo.name}'s Portfolio OS v2.9.0` },
-    { type: "system", content: 'Type "help" to see available commands.' },
+    { type: "system", content: `Welcome to ${personalInfo.brandName} Directory.` },
+    { type: "system", content: 'Type "help" to explore available categories.' },
   ]);
   const scrollRef = useRef(null);
 
@@ -17,7 +17,7 @@ const Terminal = () => {
   }, [history]);
 
   const commands = {
-    help: "Available commands: about, projects, contact, clear, skills, exp, bio",
+    help: "Categories: about, projects, contact, clear, skills, exp, bio",
     about: personalInfo.about,
     projects: `I have ${projects.length} featured projects. Some include: ${projects.map(p => p.name).join(", ")}.`,
     contact: `Email: ${personalInfo.email} | LinkedIn: /in/rusaith | GitHub: @rusaith`,
@@ -38,7 +38,7 @@ const Terminal = () => {
         response = commands[cmd];
         setHistory([...history, { type: "user", content: input }, { type: "system", content: response }]);
       } else if (cmd !== "") {
-        response = `Command not found: ${cmd}. Type "help" for options.`;
+        response = `Item not found: ${cmd}. Type "help" for options.`;
         setHistory([...history, { type: "user", content: input }, { type: "system", content: response }]);
       }
 
@@ -47,40 +47,40 @@ const Terminal = () => {
   };
 
   return (
-    <div className="w-full glass-morphism rounded-xl overflow-hidden border border-white/5 shadow-2xl font-mono text-sm">
-      <div className="bg-white/5 px-4 py-2 flex items-center gap-2 border-b border-white/5">
-        <div className="flex gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-accent-purple/40" />
-          <div className="w-3 h-3 rounded-full bg-accent-cyan/40" />
-          <div className="w-3 h-3 rounded-full bg-white/10" />
+    <div className="w-full bg-[#050507] rounded-xl overflow-hidden border border-white/10 shadow-2xl font-mono text-sm">
+      <div className="bg-white/5 px-4 py-3 flex items-center gap-3 border-b border-white/5">
+        <div className="flex gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
         </div>
-        <span className="text-white/20 text-[10px] ml-2">rusaith@cyber-core: ~</span>
+        <span className="text-white/30 text-[10px] uppercase tracking-widest ml-2 font-medium">Interactive Console</span>
       </div>
 
       <div
         ref={scrollRef}
-        className="p-4 h-[300px] overflow-y-auto custom-scrollbar bg-black/40"
+        className="p-5 h-[300px] overflow-y-auto modal-scroll bg-[#050507]"
       >
         {history.map((line, i) => (
-          <div key={i} className="mb-2">
+          <div key={i} className="mb-3">
             {line.type === "user" ? (
-              <div className="flex gap-2">
-                <span className="text-accent-cyan drop-shadow-neon-cyan">➜</span>
-                <span className="text-white-100">{line.content}</span>
+              <div className="flex gap-3">
+                <span className="text-white/40">›</span>
+                <span className="text-white tracking-wide">{line.content}</span>
               </div>
             ) : (
-              <div className="text-secondary leading-relaxed">{line.content}</div>
+              <div className="text-white/60 leading-relaxed font-light">{line.content}</div>
             )}
           </div>
         ))}
-        <div className="flex gap-2 items-center">
-          <span className="text-accent-cyan drop-shadow-neon-cyan animate-pulse">➜</span>
+        <div className="flex gap-3 items-center mt-2">
+          <span className="text-white/40 animate-pulse">›</span>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleCommand}
-            className="bg-transparent border-none outline-none text-white w-full"
+            className="bg-transparent border-none outline-none text-white w-full tracking-wide focus:ring-0"
             autoFocus
           />
         </div>

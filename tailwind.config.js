@@ -5,32 +5,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#09090B",
+        primary: "#050507",
         secondary: "#A1A1AA",
-        tertiary: "#18181B",
-        "accent-cyan": "#22D3EE",
-        "accent-purple": "#8B5CF6",
-        "black-100": "#0D0D10",
+        tertiary: "#0A0A0E",
+        "accent-cyan": "#FFFFFF", // Replaced neon cyan with crisp white
+        "accent-purple": "#71717A", // Replaced neon purple with elegant gray
+        "black-100": "#0A0A0E",
         "black-200": "#050507",
         "white-100": "#FAFAFA",
         "glass-light": "rgba(255, 255, 255, 0.03)",
-        "glass-dark": "rgba(0, 0, 0, 0.4)",
+        "glass-dark": "rgba(5, 5, 7, 0.8)",
       },
       boxShadow: {
         card: "0px 35px 120px -15px rgba(0,0,0,0.8)",
         glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
-        "glass-hover": "0 8px 32px 0 rgba(34, 211, 238, 0.1)",
-        "neon-cyan": "0 0 20px rgba(34, 211, 238, 0.3)",
-        "neon-purple": "0 0 20px rgba(139, 92, 246, 0.3)",
+        "glass-hover": "0 8px 32px 0 rgba(255, 255, 255, 0.05)",
+        "neon-cyan": "0 0 20px rgba(255, 255, 255, 0.05)", // Removed neon glow
+        "neon-purple": "0 0 20px rgba(255, 255, 255, 0.02)", // Removed neon glow
       },
       screens: {
         xs: "450px",
       },
       backgroundImage: {
         "hero-pattern": "none",
-        "cyber-gradient": "linear-gradient(135deg, #22D3EE 0%, #8B5CF6 100%)",
-        "cyan-gradient": "linear-gradient(90deg, #22D3EE 0%, #06B6D4 100%)",
-        "purple-gradient": "linear-gradient(90deg, #8B5CF6 0%, #7C3AED 100%)",
+        "cyber-gradient": "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)",
+        "cyan-gradient": "linear-gradient(90deg, #FFFFFF 0%, #A1A1AA 100%)",
+        "purple-gradient": "linear-gradient(90deg, #A1A1AA 0%, #3F3F46 100%)",
       },
       animation: {
         "liquid-blob": "liquid-blob 20s infinite alternate",

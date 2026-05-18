@@ -1,170 +1,213 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import MagneticButton from "./MagneticButton";
+import { pauseLenis, resumeLenis } from "./SmoothScroll";
+import { FiX, FiGlobe, FiDownload, FiFileText } from "react-icons/fi";
 
 const MediaModal = ({ isOpen, onClose, asset, allAssets, onSelectAsset }) => {
+
+  // Lock scroll when open
+  useEffect(() => {
+    if (isOpen) {
+      pauseLenis();
+      document.body.style.overflow = "hidden";
+    } else {
+      resumeLenis();
+      document.body.style.overflow = "";
+    }
+    return () => {
+      resumeLenis();
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  // Escape key
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    if (isOpen) window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
+
   if (!asset) return null;
 
-  const handleAction = (link) => {
-    if (link.startsWith("#")) {
-      onClose();
-      setTimeout(() => {
-        const element = document.getElementById(link.substring(1));
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 300);
-      return;
-    }
-    window.open(link, "_blank");
+  const hasLiveLink = asset.link && !asset.link.startsWith("#");
+
+  const handleOpen = () => {
+    if (!hasLiveLink) return;
+    window.open(asset.link, "_blank");
   };
 
   const modalContent = (
     <AnimatePresence mode="wait">
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-10">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-8">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-primary/90 backdrop-blur-xl"
+            className="absolute inset-0 bg-black/85 backdrop-blur-xl"
           />
 
-          {/* Modal Content */}
+          {/* Modal */}
           <motion.div
             key={asset.name}
-            initial={{ scale: 0.9, opacity: 0, x: 100 }}
-            animate={{ scale: 1, opacity: 1, x: 0 }}
-            exit={{ scale: 0.9, opacity: 0, x: -100 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-5xl max-h-[90vh] glass-morphism rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border border-white/10 flex flex-col md:flex-row shadow-2xl"
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            className="relative w-full max-w-3xl bg-[#050507] border border-white/10 rounded-3xl flex flex-col shadow-2xl max-h-[90dvh] sm:max-h-[88vh]"
           >
-            {/* Close Button */}
-            <button 
-              onClick={onClose}
-              className="absolute top-6 right-6 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 glass rounded-full flex items-center justify-center z-[110] hover:bg-white/10 transition-colors shadow-neon-cyan border-white/20"
-            >
-              ✕
-            </button>
+            {/* Top highlight */}
+            <div className="h-[1px] w-full flex-shrink-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-t-3xl" />
 
-            {/* Left Side: Preview Area */}
-            <div className="flex-[1.5] min-h-[300px] md:min-h-0 bg-gradient-to-br from-black/60 to-transparent flex flex-col items-center justify-center p-8 md:p-12 text-center border-b md:border-b-0 md:border-r border-white/5 relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className="grid-background absolute inset-0" />
-              </div>
-              
-              <motion.div 
-                key={`icon-${asset.name}`}
-                initial={{ rotateY: 90, opacity: 0 }}
-                animate={{ rotateY: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-7xl md:text-9xl mb-6 md:mb-10 drop-shadow-neon-cyan"
-              >
+            {/* HEADER */}
+            <div className="flex items-center gap-4 px-5 py-4 sm:px-8 sm:py-6 border-b border-white/5 flex-shrink-0">
+              {/* Asset icon */}
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 text-xl text-white/80">
                 {asset.icon}
-              </motion.div>
-              
-              <h2 className="text-2xl md:text-4xl font-black text-white mb-4 uppercase tracking-tighter">{asset.name}</h2>
-              <p className="text-secondary max-w-md mb-8 md:mb-10 text-[10px] md:text-sm leading-relaxed opacity-60">
-                Authorized system access for {asset.type} package. 
-                Full metadata encryption active. Internal size verified at {asset.size}.
-              </p>
-              
-              <div className="flex flex-col gap-4 relative z-10 w-full max-w-sm mx-auto">
-                {asset.versions ? (
-                  asset.versions.map((version, i) => (
-                    <div key={i} className="flex flex-col gap-2 p-4 glass-morphism border-white/5 bg-white/[0.02] rounded-2xl group/version">
-                      <span className="text-[9px] text-accent-cyan font-black uppercase tracking-[3px] text-left ml-2 mb-1">{version.label}</span>
-                      <div className="flex gap-2">
-                        <MagneticButton 
-                          onClick={() => handleAction(version.link)}
-                          className="flex-1 !py-3 border-white/10 hover:bg-white/5 uppercase tracking-widest text-[9px] font-black"
-                        >
-                          View
-                        </MagneticButton>
-                        <MagneticButton 
-                          onClick={() => handleAction(version.link)}
-                          className="flex-1 !py-3 bg-accent-cyan text-black border-none uppercase tracking-widest text-[9px] font-black hover:shadow-neon-cyan"
-                        >
-                          Fetch
-                        </MagneticButton>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto justify-center">
-                    <MagneticButton 
-                      onClick={() => handleAction(asset.link)}
-                      className="!px-6 md:!px-10 !py-3 md:!py-4 border-white/10 hover:bg-white/5 uppercase tracking-widest text-[10px] md:text-[11px] font-black w-full sm:w-auto"
-                    >
-                      {asset.link.startsWith("#") ? "Initialize Protocol" : "View Live"}
-                    </MagneticButton>
-                    {asset.canDownload && (
-                      <MagneticButton 
-                        onClick={() => handleAction(asset.link)}
-                        className="!px-6 md:!px-10 !py-3 md:!py-4 bg-accent-cyan text-black border-none uppercase tracking-widest text-[10px] md:text-[11px] font-black hover:shadow-neon-cyan w-full sm:w-auto"
-                      >
-                        Fetch Source
-                      </MagneticButton>
-                    )}
-                  </div>
-                )}
               </div>
+
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl sm:text-2xl font-light text-white tracking-wide truncate">
+                  {asset.name}
+                </h2>
+                <p className="text-[11px] text-white/50 font-medium uppercase tracking-widest mt-1">
+                  {asset.type} · {asset.size}
+                </p>
+              </div>
+
+              <button
+                onClick={onClose}
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/10 transition-all border border-white/10 text-white/50 hover:text-white flex-shrink-0 bg-white/5"
+                aria-label="Close"
+              >
+                <FiX className="text-lg" />
+              </button>
             </div>
 
-            {/* Right Side: Navigation Area */}
-            <div 
+            {/* SCROLLABLE BODY */}
+            <div
               data-lenis-prevent
-              className="flex-1 p-8 md:p-10 flex flex-col gap-6 overflow-y-auto custom-scrollbar bg-white/[0.01] max-h-[40vh] md:max-h-none"
+              className="modal-scroll flex-1 overflow-y-auto overscroll-contain min-h-0 p-5 sm:p-8 space-y-6"
+              style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.2) transparent" }}
             >
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-white font-black uppercase tracking-tighter text-lg md:text-xl">Asset Library</h3>
-                <span className="text-[10px] text-accent-cyan font-mono px-2 py-1 glass rounded-md border-white/10">0{allAssets.length}</span>
-              </div>
-              
-              <div className="flex flex-col gap-3">
-                {allAssets.map((related) => {
-                  const isActive = related.name === asset.name;
-                  return (
-                    <motion.div 
-                      key={related.name}
-                      whileHover={{ x: isActive ? 0 : 5 }}
-                      onClick={() => onSelectAsset(related)}
-                      className={`p-4 md:p-5 rounded-2xl flex items-center gap-4 group cursor-pointer transition-all border ${
-                        isActive 
-                        ? "bg-accent-cyan/10 border-accent-cyan/30 shadow-neon-cyan" 
-                        : "bg-white/[0.02] border-white/5 hover:border-white/20"
-                      }`}
+              {/* Versions */}
+              {asset.versions ? (
+                <div className="space-y-3">
+                  <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40 px-1">
+                    Available Versions
+                  </p>
+                  {asset.versions.map((version, i) => (
+                    <a
+                      key={i}
+                      href={version.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all group"
                     >
-                      <div className={`text-xl md:text-2xl transition-all duration-500 ${isActive ? "text-accent-cyan scale-110" : "opacity-40 group-hover:opacity-100 group-hover:text-accent-cyan"}`}>
-                        {related.icon}
+                      <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 transition-colors">
+                        <FiFileText className="text-white/80 text-lg group-hover:text-white transition-colors" />
                       </div>
-                      <div className="flex-1 text-left">
-                        <h4 className={`text-[12px] md:text-sm font-black uppercase tracking-tighter transition-colors ${isActive ? "text-white" : "text-white/60 group-hover:text-white"}`}>
-                          {related.name}
-                        </h4>
-                        <p className="text-secondary text-[8px] md:text-[9px] uppercase font-bold tracking-wider opacity-30 group-hover:opacity-60">
-                          {related.type} • {related.size}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-base font-medium text-white group-hover:text-white transition-colors">
+                          {version.label}
+                        </p>
+                        <p className="text-[11px] text-white/50 font-light mt-1">
+                          {i === 0 ? "Standard portfolio resume · PDF" : "Optimized for applicant tracking systems · PDF"}
                         </p>
                       </div>
-                      {isActive && (
-                        <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse shadow-neon-cyan" />
-                      )}
-                    </motion.div>
-                  );
-                })}
-              </div>
-              
-              <div className="mt-auto pt-8 border-t border-white/5">
-                <div className="glass p-4 rounded-xl border-accent-purple/10 bg-accent-purple/5">
-                  <p className="text-secondary text-[9px] md:text-[10px] leading-relaxed italic opacity-60">
-                    System Note: High-resolution assets are optimized for professional display. 
-                    Redistribution requires protocol authorization.
+                      <FiDownload className="text-white/40 group-hover:text-white transition-colors flex-shrink-0 text-lg" />
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                /* Generic about block for non-versioned assets */
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
+                  <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40">
+                    About this File
+                  </p>
+                  <p className="text-white/70 text-sm leading-relaxed font-light">
+                    {asset.type === "PDF"
+                      ? `This is the official ${asset.name} document. You can view it directly in your browser or download it to your device.`
+                      : `This ${asset.type} package contains professional assets for ${asset.name}. Open to access the contents.`}
                   </p>
                 </div>
+              )}
+
+              {/* File details */}
+              <div className="rounded-3xl border border-white/10 overflow-hidden divide-y divide-white/10 mt-6">
+                {[
+                  { label: "File Type",  value: asset.type },
+                  { label: "File Size",  value: asset.size },
+                  { label: "Access",     value: asset.canDownload ? "Download Available" : "View Only" },
+                ].map((row, i) => (
+                  <div key={i} className="flex items-center justify-between px-5 py-4 bg-white/[0.02]">
+                    <span className="text-sm text-white/50 font-medium">{row.label}</span>
+                    <span className="text-sm font-light text-white">{row.value}</span>
+                  </div>
+                ))}
               </div>
+
+              {/* Other assets */}
+              {allAssets && allAssets.length > 1 && (
+                <div className="space-y-3 pt-4">
+                  <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40 px-1">
+                    Other Assets
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    {allAssets
+                      .filter((a) => a.name !== asset.name)
+                      .map((related) => (
+                        <button
+                          key={related.name}
+                          onClick={() => onSelectAsset?.(related)}
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all text-left group"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg text-white/60 group-hover:text-white transition-colors flex-shrink-0 border border-white/10">
+                            {related.icon}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-base font-medium text-white/70 group-hover:text-white transition-colors truncate">
+                              {related.name}
+                            </p>
+                            <p className="text-[11px] text-white/40 font-light mt-1">
+                              {related.type} · {related.size}
+                            </p>
+                          </div>
+                          <FiFileText className="text-white/30 group-hover:text-white transition-colors flex-shrink-0 text-base" />
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* FOOTER ACTIONS */}
+            <div className="flex-shrink-0 px-5 sm:px-8 py-4 sm:py-5 bg-white/[0.02] border-t border-white/5 flex flex-col sm:flex-row gap-3 sm:gap-4 rounded-b-3xl">
+              {hasLiveLink ? (
+                <a
+                  href={asset.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-white text-black font-semibold text-xs sm:text-sm uppercase tracking-widest hover:bg-white/90 hover:scale-[1.02] transition-all"
+                >
+                  <FiGlobe className="flex-shrink-0 text-lg" />
+                  {asset.canDownload ? "View / Download" : "Open Document"}
+                </a>
+              ) : (
+                <div className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-white/5 text-white/30 font-medium text-xs sm:text-sm uppercase tracking-widest border border-white/10 select-none">
+                  <FiDownload className="flex-shrink-0 text-lg" />
+                  Coming Soon
+                </div>
+              )}
+              <button
+                onClick={onClose}
+                className="py-3.5 px-8 rounded-full border border-white/20 text-white/60 hover:text-white hover:bg-white/10 font-semibold text-xs sm:text-sm uppercase tracking-widest transition-all"
+              >
+                Close
+              </button>
             </div>
           </motion.div>
         </div>

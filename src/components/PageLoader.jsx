@@ -1,220 +1,127 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-/* ─── Easing curve for all reveals ─────────────────────────────── */
-const EASE = [0.16, 1, 0.3, 1];
-
-/* ─── Letter-by-letter reveal ──────────────────────────────────── */
-const SplitText = ({ text, className, delayBase = 0, stagger = 0.06 }) => (
-  <span className="inline-flex overflow-hidden">
-    {text.split("").map((char, i) => (
-      <motion.span
-        key={i}
-        initial={{ y: "105%", opacity: 0 }}
-        animate={{ y: "0%", opacity: 1 }}
-        transition={{ duration: 1.1, delay: delayBase + i * stagger, ease: EASE }}
-        className={className}
-        style={{ display: "inline-block" }}
-      >
-        {char === " " ? "\u00A0" : char}
-      </motion.span>
-    ))}
-  </span>
-);
-
-/* ─── Animated progress bar ────────────────────────────────────── */
-const ProgressBar = ({ progress }) => (
-  <div className="w-full max-w-xs space-y-3">
-    {/* Track */}
-    <div className="h-[1px] w-full bg-white/10 rounded-full overflow-hidden relative">
-      {/* Fill */}
-      <motion.div
-        className="absolute inset-y-0 left-0 bg-accent-cyan rounded-full"
-        style={{ width: `${progress}%` }}
-        transition={{ duration: 0.1 }}
-      />
-      {/* Shimmer on fill */}
-      {progress < 100 && (
-        <motion.div
-          className="absolute inset-y-0 w-12 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"
-          animate={{ left: [`${Math.max(0, progress - 10)}%`, `${progress}%`] }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        />
-      )}
-    </div>
-
-    {/* Counter row */}
-    <div className="flex items-center justify-between">
-      <motion.span
-        className="text-[10px] font-mono text-white/20 uppercase tracking-[3px]"
-        animate={{ opacity: progress === 100 ? 0 : 1 }}
-      >
-        Loading
-      </motion.span>
-      <span className="text-[11px] font-black font-mono text-accent-cyan tabular-nums">
-        {String(progress).padStart(3, "0")}%
-      </span>
-    </div>
-  </div>
-);
-
-/* ─── Main Loader ───────────────────────────────────────────────── */
-const Loader = () => {
+const PageLoader = ({ onDone }) => {
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState("loading"); // loading | done
+  const [phase, setPhase] = useState("loading");
 
-  /* Smooth progress tick — slows near 90, jumps to 100 at end */
   useEffect(() => {
     let current = 0;
     const tick = setInterval(() => {
       const remaining = 100 - current;
-      const step = Math.max(0.4, remaining * 0.025); // eases as it approaches 100
+      const step = Math.max(0.4, remaining * 0.025);
       current = Math.min(100, current + step);
       setProgress(Math.floor(current));
       if (current >= 100) {
         clearInterval(tick);
-        setTimeout(() => setPhase("done"), 500);
+        setPhase("done");
+        setTimeout(() => onDone?.(), 1200);
       }
-    }, 18);
+    }, 20);
     return () => clearInterval(tick);
   }, []);
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{
-        opacity: 0,
-        transition: { duration: 0.9, ease: "easeInOut" },
-      }}
-      className="fixed inset-0 z-[200] bg-[#09090B] flex flex-col items-center justify-center overflow-hidden"
+      exit={{ opacity: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }}
+      className="fixed inset-0 z-[1000] bg-[#050507] flex flex-col items-center justify-center overflow-hidden"
     >
-      {/* ── Ambient background glow ────────────────────────── */}
-      <div className="absolute inset-0 pointer-events-none select-none">
+      <div className="relative flex flex-col items-center gap-12 max-w-lg w-full px-6">
+        
+        {/* Shattered Name Reveal */}
         <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.06, 0.12, 0.06] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_60%,rgba(34,211,238,0.15),transparent)]"
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_50%_-10%,rgba(139,92,246,0.08),transparent)]" />
-      </div>
-
-      {/* ── Thin top accent line ───────────────────────────── */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.4, ease: EASE }}
-        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-cyan via-accent-purple to-transparent origin-left"
-      />
-
-      {/* ── Content ────────────────────────────────────────── */}
-      <div className="relative z-10 flex flex-col items-center gap-10 px-6">
-
-        {/* Role line */}
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease: EASE }}
-          className="text-[10px] font-black uppercase tracking-[6px] text-accent-cyan/50"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+          className="flex flex-col items-center gap-2"
         >
-          Portfolio
-        </motion.p>
+          <span className="text-[10px] font-medium tracking-[0.6em] text-white/30 uppercase mb-2">Neural Identity Syncing</span>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white relative select-none flex gap-1">
+            <span className="relative inline-block animate-crack-1">R</span>
+            <span className="relative inline-block animate-crack-2">U</span>
+            <span className="relative inline-block animate-crack-3">S</span>
+            <span className="relative inline-block animate-crack-1">A</span>
+            <span className="relative inline-block animate-crack-2">I</span>
+            <span className="relative inline-block animate-crack-3">T</span>
+            <span className="relative inline-block animate-crack-1">H</span>
+          </h1>
+          <div className="h-[1px] w-32 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50" />
+        </motion.div>
 
-        {/* Name */}
-        <div className="flex flex-col items-center leading-none gap-1 select-none">
-          <h1 className="text-[clamp(3.5rem,12vw,8rem)] font-black tracking-tighter leading-none text-white">
-            <SplitText text="MIM" delayBase={0.4} stagger={0.1} className="text-white" />
-          </h1>
-          <h1 className="text-[clamp(3.5rem,12vw,8rem)] font-black tracking-tighter leading-none">
-            <SplitText
-              text="RUSAITH"
-              delayBase={0.7}
-              stagger={0.07}
-              className="bg-cyber-gradient bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(34,211,238,0.4)]"
+        {/* Scanning Core Container */}
+        <div className="relative w-40 h-40 flex items-center justify-center">
+          {/* Neural Rings */}
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 border border-orange-500/5 rounded-full"
+          />
+          <motion.div 
+            animate={{ rotate: -360 }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-4 border border-white/5 rounded-full border-dashed"
+          />
+          
+          <div className="absolute inset-0 border border-orange-500/20 rounded-full animate-ping opacity-20" />
+          
+          {/* Scanner Field */}
+          <div className="absolute inset-0 overflow-hidden rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-sm">
+            <motion.div 
+              animate={{ top: ['-10%', '110%', '-10%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent shadow-[0_0_20px_rgba(249,115,22,0.8)] z-20"
             />
-          </h1>
+          </div>
+
+          {/* Progress Percentage */}
+          <div className="relative z-30 flex flex-col items-center">
+            <span className="text-4xl font-black text-white tracking-tighter tabular-nums drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              {progress}<span className="text-orange-500 text-sm ml-0.5">%</span>
+            </span>
+          </div>
         </div>
 
-        {/* Thin separator */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 1.2, delay: 1.4, ease: EASE }}
-          className="w-24 h-[1px] bg-gradient-to-r from-transparent via-accent-cyan/40 to-transparent"
-        />
-
-        {/* Progress */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0, ease: EASE }}
-          className="flex flex-col items-center gap-2 w-full max-w-xs"
-        >
-          <ProgressBar progress={progress} />
-        </motion.div>
-
-        {/* Status text */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="flex items-center gap-2"
-        >
-          <AnimatePresence mode="wait">
-            {phase === "loading" ? (
-              <motion.span
-                key="loading"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center gap-2 text-[10px] font-mono text-white/20 uppercase tracking-[4px]"
-              >
-                {/* Animated dot trio */}
-                {[0, 0.2, 0.4].map((d, i) => (
-                  <motion.span
-                    key={i}
-                    animate={{ opacity: [0.2, 1, 0.2] }}
-                    transition={{ duration: 1.2, delay: d, repeat: Infinity }}
-                    className="w-1 h-1 rounded-full bg-accent-cyan inline-block"
-                  />
-                ))}
-                Initializing
-              </motion.span>
-            ) : (
-              <motion.span
-                key="done"
-                initial={{ opacity: 0, y: 4 }}
+        {/* Status HUD Log */}
+        <div className="flex flex-col items-center gap-4 w-full">
+          <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.03] border border-white/5">
+            <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,1)]" />
+            <AnimatePresence mode="wait">
+              <motion.p 
+                key={progress > 90 ? "ready" : "sync"}
+                initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 text-[10px] font-mono text-accent-cyan uppercase tracking-[4px]"
+                className="text-[9px] uppercase tracking-[0.4em] text-white/70 font-bold"
               >
-                <motion.span
-                  animate={{ scale: [1, 1.4, 1] }}
-                  transition={{ duration: 0.6, repeat: 2 }}
-                  className="w-1.5 h-1.5 rounded-full bg-accent-cyan shadow-neon-cyan inline-block"
-                />
-                Ready
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
+                {progress > 90 ? "Diagnostic Complete" : "System Diagnostic"}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+          
+          <div className="h-5 overflow-hidden flex flex-col items-center">
+            <motion.p 
+              animate={{ y: [0, -20, -40, -60, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+              className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-medium text-center"
+            >
+              Initializing Core Interface<br />
+              Syncing Neural Node Matrix<br />
+              Calibrating Aesthetic Filters<br />
+              Deploying Premium Assets
+            </motion.p>
+          </div>
 
-      {/* ── Corner decorations (subtle) ────────────────────── */}
-      {["top-6 left-6", "top-6 right-6", "bottom-6 left-6", "bottom-6 right-6"].map((pos, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6 + i * 0.1, duration: 0.6 }}
-          className={`absolute ${pos} w-5 h-5 border-accent-cyan/20 ${
-            i === 0 ? "border-t border-l" :
-            i === 1 ? "border-t border-r" :
-            i === 2 ? "border-b border-l" :
-                      "border-b border-r"
-          }`}
-        />
-      ))}
+          {/* Bottom Progress Bar HUD */}
+          <div className="w-64 h-[1px] bg-white/10 relative mt-4">
+            <motion.div 
+              style={{ scaleX: progress / 100 }}
+              className="absolute inset-0 bg-orange-500 origin-left shadow-[0_0_15px_rgba(249,115,22,0.6)]"
+            />
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 };
 
-export default Loader;
+export default PageLoader;

@@ -1,35 +1,6 @@
 import {
-  mobile,
-  backend,
-  creator,
-  web,
-  javascript,
-  html,
-  css,
-  reactjs,
-  redux,
-  tailwind,
-  nodejs,
-  mongodb,
-  java,
-  mysql,
-  git,
-  pos,
-  crmnext,
   linkedIn,
   github,
-  imss,
-  nickelfox,
-  newgen,
-  skillrisers,
-  proximus,
-  aptihealthWeb,
-  aptihealthApp,
-  zealWeb,
-  zealApp,
-  rollWeb,
-  rollApp,
-  nextJs,
 } from "../assets";
 
 const navigationPaths = {
@@ -80,16 +51,22 @@ const services = [
 ];
 
 const technologies = [
+  // Orbit 1: Core Web
   { name: "React JS", icon: "SiReact" },
+  { name: "TypeScript", icon: "SiTypescript" },
   { name: "JavaScript", icon: "SiJavascript" },
   { name: "Tailwind CSS", icon: "SiTailwindcss" },
-  { name: "HTML 5", icon: "SiHtml5" },
-  { name: "CSS 3", icon: "SiCss3" },
-  { name: "Photoshop", icon: "SiAdobephotoshop" },
-  { name: "Illustrator", icon: "SiAdobeillustrator" },
-  { name: "Odoo ERP", icon: "FiBox" },
+
+  // Orbit 2: Backend & Systems
+  { name: "Odoo ERP", icon: "SiOdoo" },
   { name: "MySQL", icon: "SiMysql" },
   { name: "Git", icon: "SiGit" },
+
+  // Orbit 3: Design & 3D
+  { name: "Photoshop", icon: "SiAdobephotoshop" },
+  { name: "Illustrator", icon: "SiAdobeillustrator" },
+  { name: "Blender", icon: "SiBlender" },
+  { name: "3ds Max", icon: "SiAutodesk" },
 ];
 
 const experiences = [
@@ -97,7 +74,7 @@ const experiences = [
     title: "Graphic Designer cum IT Executive",
     company_name: "ChillFrost (Pvt) Ltd",
     company_website: "#",
-    icon: proximus, // Placeholder for ChillFrost
+    icon: "", // Placeholder for ChillFrost
     iconBg: "#383E56",
     date: "2025 - Present",
     points: [
@@ -110,7 +87,7 @@ const experiences = [
     title: "Web Developer",
     company_name: "Infinity Marketing Services and Solutions (Pvt) Ltd",
     company_website: "https://imss.lk",
-    icon: imss,
+    icon: "",
     iconBg: "#E6DEDD",
     date: "2024 - 2025",
     points: [
@@ -123,7 +100,7 @@ const experiences = [
     title: "Graphic Designer / Digital Marketing Assistant",
     company_name: "Food Champ",
     company_website: "#",
-    icon: skillrisers, // Placeholder for Food Champ
+    icon: "", // Placeholder for Food Champ
     iconBg: "#383E56",
     date: "2022 - 2024",
     points: [
@@ -257,7 +234,7 @@ const personalInfo = {
   name: "M I Muhammathu Rusaith",
   brandName: "MIM RUSAITH",
   fullName: "Muhammathu Ismail Muhammathu Rusaith",
-  email: "rusa.rock72@gmail.com",
+  email: "rusaithoff72@gmail.com",
   phone: "+94 77 080 2365",
   role: "Graphic Designer | Web Developer | IT Executive",
   about: `I am a creative and detail-oriented Graphic Designer and Web Developer with hands-on experience in digital marketing, branding, and responsive web development. 
@@ -274,13 +251,23 @@ const publicUrls = {
   socialProfiles: {
     linkedin: {
       title: "linkedin",
-      link: "https://www.linkedin.com/in/muhammadh-rusaith-65004131b/",
+      link: "https://www.linkedin.com/in/muhammathu-rusaith-65004131b",
       icon: linkedIn,
     },
     github: {
       title: "github",
       link: "https://github.com/RusaithMhd",
       icon: github,
+    },
+    instagram: {
+      title: "instagram",
+      link: "https://www.instagram.com/muhammadhrusaith?igsh=dWtucW5sYjFxZXJ4&utm_source=qr",
+      icon: "FiInstagram",
+    },
+    facebook: {
+      title: "facebook",
+      link: "https://www.facebook.com/share/1EKqN9kBzW/?mibextid=wwXIfr",
+      icon: "FiFacebook",
     },
   },
 };

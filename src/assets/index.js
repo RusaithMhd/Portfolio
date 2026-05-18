@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import rusaith from "./Rusaith.png";
+import rusaithHero from "./Rusaith_Hero_img.png";
 import name from "./name.png";
-import imss from "./company/imss.png";
 import backend from "./backend.png";
 import creator from "./creator.png";
 import mobile from "./mobile.png";
@@ -11,7 +11,6 @@ import linkedIn from "./linkedIn.png";
 import menu from "./menu.svg";
 import close from "./close.svg";
 import demo from "./demo.png";
-import pos from "./projects/pos.png";
 import css from "./tech/css.png";
 import git from "./tech/git.png";
 import html from "./tech/html.png";
@@ -26,17 +25,7 @@ import angular from "./tech/angular.png";
 import redux from "./tech/redux.png";
 import tailwind from "./tech/tailwind.png";
 import typescript from "./tech/typescript.png";
-import crmnext from "./company/crmnext.png";
-import nickelfox from "./company/nickelfox.png";
-import newgen from "./company/newgen.png";
-import skillrisers from "./company/skillrisers.png";
-import proximus from "./company/proximus.png";
-import aptihealthWeb from "./projects/aptihealthWeb.png";
-import aptihealthApp from "./projects/aptihealthApp.png";
-import zealWeb from "./projects/zealWeb.png";
-import zealApp from "./projects/zealApp.png";
-import rollWeb from "./projects/rollWeb.png";
-import rollApp from "./projects/rollApp.png";
+import bg from "./BG.png";
 
 export {
   logo,
@@ -48,7 +37,6 @@ export {
   linkedIn,
   demo,
   menu,
-  imss,
   close,
   css,
   git,
@@ -59,6 +47,7 @@ export {
   nodejs,
   java,
   rusaith,
+  rusaithHero,
   mysql,
   reactjs,
   nextJs,
@@ -66,16 +55,5 @@ export {
   redux,
   tailwind,
   typescript,
-  crmnext,
-  nickelfox,
-  newgen,
-  skillrisers,
-  proximus,
-  aptihealthWeb,
-  aptihealthApp,
-  zealWeb,
-  pos,
-  zealApp,
-  rollWeb,
-  rollApp,
+  bg,
 };

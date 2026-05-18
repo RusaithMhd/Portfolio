@@ -18,10 +18,10 @@ const ImageProtector = ({ src, alt, className, removeWhiteBg = false }) => {
       {/* Inner dot-grid pattern for premium feel */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-20"
-        style={{ backgroundImage: "radial-gradient(rgba(0,255,255,0.15) 1px, transparent 1px)", backgroundSize: "20px 20px" }}
+        style={{ backgroundImage: "radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px)", backgroundSize: "20px 20px" }}
       />
       {/* Inner radial glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(0,255,255,0.04) 0%, transparent 70%)" }} />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0.02) 0%, transparent 70%)" }} />
 
       {/* The Image */}
       <img 
@@ -41,7 +41,7 @@ const ImageProtector = ({ src, alt, className, removeWhiteBg = false }) => {
       {/* Watermark */}
       <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none overflow-hidden">
         <div 
-          className="transform -rotate-45 font-black text-white/[0.07] text-3xl md:text-4xl tracking-[8px] uppercase whitespace-nowrap select-none"
+          className="transform -rotate-45 font-black text-black/[0.04] text-3xl md:text-4xl tracking-[8px] uppercase whitespace-nowrap select-none"
         >
           © RUSAITH
         </div>
@@ -49,7 +49,7 @@ const ImageProtector = ({ src, alt, className, removeWhiteBg = false }) => {
 
       {/* Corner label */}
       <div className="absolute bottom-2 right-3 z-30 pointer-events-none">
-        <span className="text-[7px] text-accent-cyan/30 font-mono uppercase tracking-[2px]">rusaith.dev</span>
+        <span className="text-[7px] text-black/30 font-mono uppercase tracking-[2px]">rusaith.dev</span>
       </div>
     </div>
   );

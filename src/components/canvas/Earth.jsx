@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import React, { Suspense } from "react";
 import CanvasLoader from "../Loader";
@@ -12,12 +13,14 @@ const Earth = () => {
 };
 
 const EarthCanvas = () => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <Canvas
       shadows
-      frameloop="demand"
-      dpr={[1, 2]}
-      gl={{ preserveDrawingBuffer: true }}
+      frameloop={isMobile ? "demand" : "always"}
+      dpr={isMobile ? [1, 1] : [1, 2]}
+      gl={{ preserveDrawingBuffer: true, antialias: !isMobile }}
       camera={{
         fov: 45,
         near: 0.1,
@@ -27,7 +30,7 @@ const EarthCanvas = () => {
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
-          autoRotate
+          autoRotate={!isMobile}
           enableZoom={false}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}

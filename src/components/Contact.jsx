@@ -2,23 +2,19 @@ import React, { useRef, useState } from "react";
 import SectionWrapper from "../hoc/SectionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import { slideIn, fadeIn, textVariant } from "../utils/motion";
-import { styles } from "../styles";
 import { EarthCanvas } from "./canvas";
 import { publicUrls, personalInfo } from "../constants";
 import Modal from "./Modal";
 import MagneticButton from "./MagneticButton";
-import CyberNetwork from "./CyberNetwork";
 
 import { 
-  FiLinkedin, 
-  FiGithub, 
-  FiInstagram, 
   FiMail, 
-  FiPhone, 
-  FiMessageSquare,
-  FiSend,
-  FiCheckCircle,
-  FiZap
+  FiMessageSquare, 
+  FiLinkedin, 
+  FiInstagram, 
+  FiFacebook, 
+  FiGithub,
+  FiSend
 } from "react-icons/fi";
 
 const ContactCard = ({ icon: Icon, title, value, onClick }) => (
@@ -26,16 +22,16 @@ const ContactCard = ({ icon: Icon, title, value, onClick }) => (
     variants={fadeIn("up", "spring", 0.5, 0.75)}
     whileHover={{ y: -5 }}
     onClick={onClick}
-    className="relative p-[1px] rounded-xl overflow-hidden group cursor-pointer"
+    className="relative p-[1px] rounded-[2rem] overflow-hidden group cursor-pointer"
   >
-    <div className="absolute inset-0 bg-gradient-to-r from-accent-cyan/0 via-accent-cyan/40 to-accent-purple/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-    <div className="relative glass-card p-6 flex flex-col items-center justify-center gap-4 bg-black/60 border border-white/5 rounded-xl h-full">
-      <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-white/[0.02] border border-white/5 group-hover:border-accent-cyan/40 transition-colors shadow-xl">
-        <Icon className="text-xl text-white/40 group-hover:text-accent-cyan transition-colors" />
+    <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+    <div className="relative p-4 md:p-8 flex flex-col items-center justify-center gap-2 md:gap-4 bg-white/[0.02] border border-white/10 rounded-2xl md:rounded-[2rem] h-full shadow-2xl backdrop-blur-md">
+      <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:border-orange-500/50 transition-all shadow-xl">
+        <Icon className="text-xl md:text-2xl text-white/50 group-hover:text-orange-500 transition-colors" />
       </div>
-      <div className="text-center">
-        <p className="text-[9px] text-white/30 font-mono uppercase tracking-[3px] mb-2">{title}</p>
-        <p className="text-white font-bold uppercase tracking-widest text-xs group-hover:text-white/90 transition-colors">{value}</p>
+      <div className="text-center mt-1">
+        <p className="text-[8px] md:text-[10px] text-white/50 uppercase tracking-[1px] md:tracking-[3px] mb-1 font-medium">{title}</p>
+        <p className="hidden md:block text-xs md:text-sm text-white/90 font-medium truncate max-w-[150px]">{value}</p>
       </div>
     </div>
   </motion.div>
@@ -100,12 +96,14 @@ Reply Soon as Possible :)
   return (
     <div className="relative flex flex-col gap-10">
       
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Reach out for collaborations</p>
-        <h2 className={styles.sectionHeadText}>Terminal Contact.</h2>
+      <motion.div variants={textVariant()} className="flex flex-col items-center md:items-start text-center md:text-left">
+        <p className="text-[12px] uppercase tracking-[0.3em] text-orange-500/80 font-medium mb-4">Let's Connect</p>
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white">
+          Get in <span className="font-semibold text-orange-500 italic">Touch</span>
+        </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+      <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
         <ContactCard 
           icon={FiMail} 
           title="Direct Mail" 
@@ -124,51 +122,103 @@ Reply Soon as Possible :)
           value="Connect on LinkedIn" 
           onClick={() => window.open(publicUrls.socialProfiles.linkedin.link, "_blank")}
         />
+        <ContactCard 
+          icon={FiInstagram} 
+          title="Lifestyle" 
+          value="Follow on Instagram" 
+          onClick={() => window.open(publicUrls.socialProfiles.instagram.link, "_blank")}
+        />
+        <ContactCard 
+          icon={FiFacebook} 
+          title="Community" 
+          value="Connect on Facebook" 
+          onClick={() => window.open(publicUrls.socialProfiles.facebook.link, "_blank")}
+        />
+        <ContactCard 
+          icon={FiGithub} 
+          title="Repositories" 
+          value="View on GitHub" 
+          onClick={() => window.open(publicUrls.socialProfiles.github.link, "_blank")}
+        />
       </div>
 
-      <div className="lg:flex-row flex flex-col-reverse gap-8 overflow-hidden mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-12 items-stretch">
         
-        {/* Terminal Form Window */}
+        {/* Left Side: Strategic Hub (Socials & Info) */}
+        <div className="lg:col-span-4 flex flex-col gap-6 h-full">
+          <motion.div 
+            variants={slideIn("left", "tween", 0.1, 1)}
+            className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 backdrop-blur-xl relative overflow-hidden group shadow-2xl h-full flex flex-col"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <FiMessageSquare className="text-6xl text-orange-500" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">Strategic Hub</h3>
+            <p className="text-white/50 text-xs font-light leading-relaxed mb-8">
+              Available for high-impact collaborations and technical leadership opportunities globally.
+            </p>
+            
+            <div className="flex flex-col gap-4 flex-1">
+              {[
+                { icon: FiMail, label: "Email", value: personalInfo.email, link: `mailto:${personalInfo.email}` },
+                { icon: FiLinkedin, label: "LinkedIn", value: "Connect with me", link: publicUrls.socialProfiles.linkedin.link },
+                { icon: FiGithub, label: "GitHub", value: "Review Code", link: publicUrls.socialProfiles.github.link }
+              ].map((item, i) => (
+                <div 
+                  key={i}
+                  onClick={() => window.open(item.link, "_blank")}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-orange-500/30 transition-all cursor-pointer group/item"
+                >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/5 group-hover/item:bg-orange-500 group-hover/item:text-black transition-all">
+                    <item.icon className="text-lg" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] text-white/40 uppercase tracking-widest">{item.label}</span>
+                    <span className="text-[11px] text-white/80 font-medium truncate max-w-[150px]">{item.value}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex justify-between items-center px-2">
+              <div className="flex gap-4">
+                <FiInstagram onClick={() => window.open(publicUrls.socialProfiles.instagram.link, "_blank")} className="text-white/40 hover:text-orange-500 cursor-pointer transition-colors" />
+                <FiFacebook onClick={() => window.open(publicUrls.socialProfiles.facebook.link, "_blank")} className="text-white/40 hover:text-orange-500 cursor-pointer transition-colors" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[9px] text-white/40 uppercase tracking-widest">Active Status</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right Side: Message Portal (Form) */}
         <motion.div
-          variants={slideIn("left", "tween", 0.2, 1)}
-          className="lg:flex-[1.2] flex-[1] rounded-2xl overflow-hidden border border-white/10 bg-[#050505] shadow-2xl relative"
+          variants={slideIn("right", "tween", 0.2, 1)}
+          className="lg:col-span-8 rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl relative backdrop-blur-md h-full"
         >
-          {/* Terminal Window Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#0a0a0a] border-b border-white/5">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/80 border border-red-500/50" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/80 border border-yellow-500/50" />
-              <div className="w-3 h-3 rounded-full bg-green-500/80 border border-green-500/50" />
-            </div>
-            <div className="flex items-center gap-2">
-              <FiZap className="text-accent-cyan/50 text-[10px]" />
-              <span className="text-[10px] font-mono text-white/40 tracking-[2px]">root@rusaith:~</span>
-            </div>
-          </div>
+          {/* Neural HUD Glow Background */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-orange-500/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-orange-500/5 blur-[100px] rounded-full pointer-events-none" />
 
-          <div className="p-6 md:p-12 relative">
-            {/* Terminal Grid Background */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] opacity-20 pointer-events-none" />
-
-            {/* Console Output Header */}
-            <div className="mb-10 font-mono text-xs text-white/50 space-y-1">
-              <p>{`> SYSTEM_READY`}</p>
-              <p>{`> SECURE_CONNECTION_ESTABLISHED`}</p>
-              <p className="text-accent-cyan animate-pulse">{`> WAITING FOR USER INPUT_`}</p>
+          <div className="p-8 md:p-10 relative h-full flex flex-col">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-1 h-1 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+              <p className="text-[10px] uppercase tracking-[0.3em] text-orange-500/80 font-medium">Message Portal</p>
             </div>
 
             <form
               ref={formRef}
               onSubmit={handleSubmit}
-              className="flex flex-col gap-8 relative z-10"
+              className="flex flex-col gap-10"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="relative group">
-                  <span className={`block text-[10px] font-mono uppercase tracking-[2px] transition-all duration-300 mb-2 ${focusedField === 'name' ? 'text-accent-cyan' : 'text-white/40'}`}>
-                    Your Name
+                  <span className={`block text-[11px] uppercase tracking-[2px] transition-all duration-300 mb-3 font-medium ${focusedField === 'name' ? 'text-orange-500' : 'text-white/40'}`}>
+                    Full Name
                   </span>
-                  <div className="flex items-center border-b border-white/10 group-hover:border-white/30 transition-colors">
-                    <span className="text-accent-cyan/50 font-mono mr-2">{`>`}</span>
+                  <div className="flex items-center border-b border-white/10 group-hover:border-white/30 transition-colors pb-2">
                     <input
                       type="text"
                       name="name"
@@ -176,21 +226,21 @@ Reply Soon as Possible :)
                       onChange={handleChange}
                       onFocus={() => setFocusedField('name')}
                       onBlur={() => setFocusedField(null)}
-                      placeholder="John Doe"
-                      className="w-full bg-transparent py-3 text-white font-mono text-sm outline-none placeholder:text-white/20"
+                      placeholder="Enter your name"
+                      className="bg-transparent py-2 px-0 outline-none w-full text-white placeholder:text-white/10 font-light tracking-wide transition-all"
+                      required
                     />
                   </div>
                   {focusedField === 'name' && (
-                    <motion.div layoutId="input-glow" className="absolute bottom-0 left-0 right-0 h-[1px] bg-accent-cyan shadow-neon-cyan" />
+                    <motion.div layoutId="input-glow" className="absolute bottom-0 left-0 right-0 h-[1px] bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
                   )}
                 </div>
 
                 <div className="relative group">
-                  <span className={`block text-[10px] font-mono uppercase tracking-[2px] transition-all duration-300 mb-2 ${focusedField === 'email' ? 'text-accent-purple' : 'text-white/40'}`}>
-                    Your Email
+                  <span className={`block text-[11px] uppercase tracking-[2px] transition-all duration-300 mb-3 font-medium ${focusedField === 'email' ? 'text-orange-500' : 'text-white/40'}`}>
+                    Email Address
                   </span>
-                  <div className="flex items-center border-b border-white/10 group-hover:border-white/30 transition-colors">
-                    <span className="text-accent-purple/50 font-mono mr-2">{`>`}</span>
+                  <div className="flex items-center border-b border-white/10 group-hover:border-white/30 transition-colors pb-2">
                     <input
                       type="email"
                       name="email"
@@ -198,85 +248,59 @@ Reply Soon as Possible :)
                       onChange={handleChange}
                       onFocus={() => setFocusedField('email')}
                       onBlur={() => setFocusedField(null)}
-                      placeholder="john@example.com"
-                      className="w-full bg-transparent py-3 text-white font-mono text-sm outline-none placeholder:text-white/20"
+                      placeholder="you@company.com"
+                      className="bg-transparent py-2 px-0 outline-none w-full text-white placeholder:text-white/10 font-light tracking-wide transition-all"
+                      required
                     />
                   </div>
                   {focusedField === 'email' && (
-                    <motion.div layoutId="input-glow" className="absolute bottom-0 left-0 right-0 h-[1px] bg-accent-purple shadow-neon-purple" />
+                    <motion.div layoutId="input-glow" className="absolute bottom-0 left-0 right-0 h-[1px] bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
                   )}
                 </div>
               </div>
 
-              <div className="relative group mt-4">
-                <span className={`block text-[10px] font-mono uppercase tracking-[2px] transition-all duration-300 mb-2 ${focusedField === 'message' ? 'text-accent-cyan' : 'text-white/40'}`}>
-                  Your Message
+              <div className="relative group">
+                <span className={`block text-[11px] uppercase tracking-[2px] transition-all duration-300 mb-3 font-medium ${focusedField === 'message' ? 'text-orange-500' : 'text-white/40'}`}>
+                  Project Inquiry
                 </span>
-                <div className="flex items-start border border-white/5 rounded-lg bg-white/[0.01] p-4 group-hover:border-white/20 transition-colors focus-within:border-accent-cyan/50 focus-within:bg-accent-cyan/[0.02]">
-                  <span className="text-accent-cyan/50 font-mono mr-3 mt-1">{`>`}</span>
+                <div className="relative rounded-2xl bg-white/[0.02] border border-white/5 group-hover:border-white/20 transition-all p-4">
                   <textarea
-                    rows={5}
+                    rows={6}
                     name="message"
                     value={form.message}
                     onChange={handleChange}
                     onFocus={() => setFocusedField('message')}
                     onBlur={() => setFocusedField(null)}
-                    placeholder="Hello, I'd like to talk about..."
-                    className="w-full bg-transparent text-white font-mono text-sm outline-none placeholder:text-white/20 resize-none leading-relaxed"
+                    placeholder="Describe your vision or inquiry here..."
+                    className="bg-transparent outline-none w-full text-white placeholder:text-white/10 font-light tracking-wide resize-none"
+                    required
                   />
+                  {focusedField === 'message' && (
+                    <motion.div layoutId="input-glow" className="absolute bottom-0 left-0 right-0 h-[1px] bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
+                  )}
                 </div>
               </div>
 
-              {/* Status Bar / Execute Area */}
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-8 pt-6 border-t border-white/5">
-                <div className="flex items-center gap-4 w-full md:w-auto">
-                  <MagneticButton 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full md:w-auto !bg-transparent border border-accent-cyan text-accent-cyan hover:!bg-accent-cyan hover:text-black uppercase font-mono font-bold tracking-widest !px-8 !py-3 hover:shadow-neon-cyan transition-all flex items-center justify-center gap-3 group disabled:opacity-50 text-xs"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <FiSend className="animate-bounce" /> SENDING...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        Send Message
-                      </span>
-                    )}
-                  </MagneticButton>
-                </div>
-
-                {/* Server Diagnostics */}
-                <div className="flex items-center gap-6 text-[9px] font-mono uppercase tracking-widest text-white/30 hidden md:flex">
-                  <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
-                    <span>Secure Connection</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-1.5 h-1.5 rounded-full ${form.name && form.email && form.message ? "bg-green-500" : "bg-white/10"}`} />
-                    <span>Ready to Send</span>
-                  </div>
-                </div>
+              <div className="flex items-center justify-end">
+                <MagneticButton 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full md:w-auto bg-orange-500 text-black hover:scale-105 uppercase font-bold tracking-widest !px-12 !py-4 rounded-full transition-all flex items-center justify-center gap-3 group disabled:opacity-50 text-xs shadow-[0_0_20px_rgba(249,115,22,0.2)] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)]"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-3 h-3 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      Initializing...
+                    </span>
+                  ) : (
+                    <>
+                      Execute Mission <FiSend className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </MagneticButton>
               </div>
             </form>
           </div>
-        </motion.div>
-
-        {/* 3D Globe Container */}
-        <motion.div
-          variants={slideIn("right", "tween", 0.2, 1)}
-          className="lg:flex-1 xl:h-auto md:h-[650px] h-[400px] glass-card rounded-2xl overflow-hidden border border-white/5 bg-black/40 relative group"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,255,255,0.05)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
-          <EarthCanvas />
-          
-          {/* Globe Overlay HUD - Left */}
-          <div className="absolute bottom-6 left-6 font-mono text-[9px] text-white/20 uppercase tracking-widest pointer-events-none">
-            <p>Location: Global</p>
-            <p>Node: Earth_Server_1</p>
-          </div>
-
         </motion.div>
       </div>
       

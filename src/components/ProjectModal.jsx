@@ -42,54 +42,55 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
   const hasLiveLink = project.hosted_link && project.hosted_link !== "#";
 
   const tabs = [
-    { id: "about",   label: "About",        icon: FiInfo },
-    { id: "tech",    label: "Tech Stack",    icon: FiCode },
-    { id: "details", label: "Project Info",  icon: FiLayers },
+    { id: "about",   label: "About",       icon: FiInfo },
+    { id: "tech",    label: "Tech Stack",   icon: FiCode },
+    { id: "details", label: "Info",         icon: FiLayers },
   ];
 
   const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        // Full-screen positioner — does NOT scroll
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-8">
 
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/85 backdrop-blur-xl"
+            className="absolute inset-0 bg-black/90 md:bg-black/85 backdrop-blur-sm md:backdrop-blur-xl"
           />
 
-          {/* Modal shell — fixed height so inner area can scroll */}
           <motion.div
-            initial={{ scale: 0.92, opacity: 0, y: 30 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.92, opacity: 0, y: 30 }}
-            transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="relative w-full max-w-4xl bg-[#0e0e10] border border-white/10 rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.9)] flex flex-col"
-            // Constrained height — inner content scrolls inside this box
-            style={{ maxHeight: "min(90vh, 700px)" }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            className="relative w-full max-w-4xl bg-[#050507] border border-white/10 rounded-3xl flex flex-col shadow-2xl max-h-[90dvh] sm:max-h-[88vh]"
           >
-            {/* ── TOP ACCENT ─────────────────────────────────────────── */}
-            <div className="h-[2px] w-full bg-gradient-to-r from-accent-cyan via-accent-purple to-transparent flex-shrink-0 rounded-t-3xl" />
+            {/* Top highlight */}
+            <div className="h-[1px] w-full flex-shrink-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-t-3xl" />
 
-            {/* ── HEADER (never scrolls) ──────────────────────────────── */}
-            <div className="flex items-start gap-4 p-5 md:p-7 border-b border-white/5 flex-shrink-0">
-              <div className="w-12 h-12 rounded-2xl bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/20 flex-shrink-0 shadow-neon-cyan">
-                <Icon className="text-xl text-accent-cyan" />
+
+            {/* HEADER */}
+            <div className="flex items-center gap-4 px-5 py-4 sm:px-8 sm:py-6 border-b border-white/5 flex-shrink-0">
+              {/* Icon */}
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 flex-shrink-0">
+                <Icon className="text-xl sm:text-2xl text-white/80" />
               </div>
 
+              {/* Title + tags */}
               <div className="flex-1 min-w-0">
-                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight mb-2">
+                <h2 className="text-xl sm:text-3xl font-light text-white tracking-wide leading-tight truncate">
                   {project.name}
                 </h2>
-                <div className="flex flex-wrap gap-1.5">
+                {/* Tags */}
+                <div className="hidden sm:flex flex-wrap gap-2 mt-2">
                   {project.tags.map((tag) => (
                     <span
                       key={tag.name}
-                      className="text-[10px] font-bold font-mono text-accent-cyan/70 bg-accent-cyan/5 border border-accent-cyan/15 px-2 py-0.5 rounded-md uppercase tracking-wider"
+                      className="text-[10px] font-medium text-white/60 bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider"
                     >
                       {tag.name}
                     </span>
@@ -97,45 +98,48 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
                 </div>
               </div>
 
+              {/* Close */}
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/10 transition-all border border-white/10 text-white/50 hover:text-white flex-shrink-0"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:bg-white/10 transition-all border border-white/10 text-white/50 hover:text-white flex-shrink-0 bg-white/5"
                 aria-label="Close"
               >
-                <FiX />
+                <FiX className="text-lg sm:text-xl" />
               </button>
             </div>
 
-            {/* ── TABS (never scrolls) ────────────────────────────────── */}
-            <div className="flex border-b border-white/5 bg-black/20 flex-shrink-0 px-2">
+            {/* TABS */}
+            <div className="flex justify-center border-b border-white/5 bg-white/[0.02] flex-shrink-0 overflow-x-auto scrollbar-none">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all relative whitespace-nowrap ${
+                  className={[
+                    "flex items-center gap-2 px-5 sm:px-8 py-4 sm:py-5",
+                    "text-[11px] sm:text-[12px] font-medium uppercase tracking-widest",
+                    "transition-all relative whitespace-nowrap flex-shrink-0",
                     activeTab === tab.id
-                      ? "text-accent-cyan"
-                      : "text-white/30 hover:text-white/60"
-                  }`}
+                      ? "text-white"
+                      : "text-white/40 hover:text-white/80",
+                  ].join(" ")}
                 >
-                  <tab.icon className="text-sm" />
+                  <tab.icon className="text-sm flex-shrink-0" />
                   {tab.label}
                   {activeTab === tab.id && (
                     <motion.div
                       layoutId="modal-tab-line"
-                      className="absolute bottom-0 left-0 w-full h-[2px] bg-accent-cyan shadow-neon-cyan"
+                      className="absolute bottom-0 left-0 w-full h-[2px] bg-white"
                     />
                   )}
                 </button>
               ))}
             </div>
 
-            {/* ── SCROLLABLE CONTENT AREA ─────────────────────────────── */}
-            {/* data-lenis-prevent tells Lenis to ignore wheel events here */}
+            {/* SCROLLABLE CONTENT */}
             <div
               data-lenis-prevent
-              className="modal-scroll flex-1 overflow-y-auto overscroll-contain min-h-0 p-5 md:p-7"
-              style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(34,211,238,0.2) transparent" }}
+              className="modal-scroll flex-1 overflow-y-auto overscroll-contain min-h-0 p-5 sm:p-8"
+              style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.2) transparent" }}
             >
               <AnimatePresence mode="wait">
 
@@ -143,33 +147,45 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
                 {activeTab === "about" && (
                   <motion.div
                     key="about"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="space-y-6"
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-8"
                   >
+                    {/* Tags on mobile */}
+                    <div className="flex flex-wrap gap-2 sm:hidden">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag.name}
+                          className="text-[10px] font-medium text-white/60 bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider"
+                        >
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                      <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40 mb-3">
                         About this Project
                       </p>
-                      <p className="text-secondary text-[15px] leading-relaxed">
+                      <p className="text-white/70 text-sm sm:text-base leading-relaxed font-light">
                         {project.fullDescription || project.description}
                       </p>
                     </div>
 
                     {project.objectives && (
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                        <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40 mb-3">
                           Key Deliverables
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                           {project.objectives.map((obj, i) => (
                             <div
                               key={i}
-                              className="flex items-center gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-accent-cyan/20 transition-all"
+                              className="flex items-start gap-4 p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/5"
                             >
-                              <FiCheckCircle className="text-accent-cyan flex-shrink-0" />
-                              <span className="text-sm text-white/70 font-medium">{obj}</span>
+                              <FiCheckCircle className="text-white/80 flex-shrink-0 mt-0.5" />
+                              <span className="text-sm text-white/70 font-light leading-relaxed">{obj}</span>
                             </div>
                           ))}
                         </div>
@@ -182,28 +198,28 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
                 {activeTab === "tech" && (
                   <motion.div
                     key="tech"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="space-y-3"
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-4"
                   >
-                    <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                    <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40 mb-3">
                       Technologies Used
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {(project.stackDetails || project.tags).map((item, i) => (
                         <div
                           key={i}
-                          className="flex gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-accent-cyan/20 hover:bg-accent-cyan/[0.02] transition-all group"
+                          className="flex gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all group"
                         >
-                          <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent-cyan/20 transition-colors">
-                            <FiCode className="text-accent-cyan" />
+                          <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-white/10 transition-colors border border-white/10">
+                            <FiCode className="text-white/80 text-lg group-hover:text-white transition-colors" />
                           </div>
-                          <div>
-                            <h4 className="text-white font-black text-sm mb-1 group-hover:text-accent-cyan transition-colors">
+                          <div className="min-w-0 flex flex-col justify-center">
+                            <h4 className="text-white font-medium text-base mb-1 group-hover:text-white/90 transition-colors">
                               {item.name}
                             </h4>
-                            <p className="text-secondary text-xs leading-relaxed opacity-60">
+                            <p className="text-white/50 text-xs leading-relaxed font-light line-clamp-2">
                               {item.description || `Used for building and enhancing the ${item.name} layer.`}
                             </p>
                           </div>
@@ -217,22 +233,22 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
                 {activeTab === "details" && (
                   <motion.div
                     key="details"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="space-y-3"
+                    exit={{ opacity: 0, y: -8 }}
+                    className="space-y-4"
                   >
-                    <p className="text-[10px] font-black uppercase tracking-[3px] text-white/30 mb-3">
+                    <p className="text-[11px] font-medium uppercase tracking-[3px] text-white/40 mb-3">
                       Project Details
                     </p>
-                    <div className="rounded-2xl border border-white/5 overflow-hidden divide-y divide-white/5">
+                    <div className="rounded-3xl border border-white/10 overflow-hidden divide-y divide-white/10">
                       {(project.specs || []).map((spec, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between px-5 py-4 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+                          className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 sm:px-6 sm:py-5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
                         >
-                          <span className="text-sm text-white/40 font-medium">{spec.label}</span>
-                          <span className="text-sm font-black text-white tracking-wide">{spec.value}</span>
+                          <span className="text-xs sm:text-sm text-white/50 font-medium">{spec.label}</span>
+                          <span className="text-sm sm:text-base font-light text-white tracking-wide text-right">{spec.value}</span>
                         </div>
                       ))}
                     </div>
@@ -242,27 +258,27 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
               </AnimatePresence>
             </div>
 
-            {/* ── FOOTER CTA (never scrolls) ──────────────────────────── */}
-            <div className="flex-shrink-0 px-5 md:px-7 py-4 bg-black/40 border-t border-white/5 flex flex-col sm:flex-row gap-3 rounded-b-3xl">
+            {/* FOOTER CTA */}
+            <div className="flex-shrink-0 px-5 sm:px-8 py-4 sm:py-5 bg-white/[0.02] border-t border-white/5 flex flex-col sm:flex-row gap-3 sm:gap-4 rounded-b-3xl">
               {hasLiveLink ? (
                 <a
                   href={project.hosted_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-accent-cyan text-black font-black text-sm uppercase tracking-widest hover:shadow-neon-cyan transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-white text-black font-semibold text-xs sm:text-sm uppercase tracking-widest hover:bg-white/90 hover:scale-[1.02] transition-all"
                 >
                   <FiGlobe />
                   View Live Site
                 </a>
               ) : (
-                <div className="flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-white/5 text-white/25 font-black text-sm uppercase tracking-widest border border-white/5 select-none">
+                <div className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-white/5 text-white/30 font-medium text-xs sm:text-sm uppercase tracking-widest border border-white/10 select-none">
                   <FiGlobe />
                   Not Publicly Live
                 </div>
               )}
               <button
                 onClick={onClose}
-                className="sm:w-auto px-6 py-3 rounded-xl border border-white/10 text-white/50 hover:text-white hover:bg-white/5 font-black text-sm uppercase tracking-widest transition-all"
+                className="py-3.5 px-8 rounded-full border border-white/20 text-white/60 hover:text-white hover:bg-white/10 font-semibold text-xs sm:text-sm uppercase tracking-widest transition-all"
               >
                 Close
               </button>

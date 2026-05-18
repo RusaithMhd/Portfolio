@@ -11,12 +11,9 @@ const Works = lazy(() => import("./components/Works"));
 const MediaKit = lazy(() => import("./components/MediaKit"));
 const Testimonials = lazy(() => import("./components/Testimonials"));
 const Contact = lazy(() => import("./components/Contact"));
-import CustomCursor from "./components/CustomCursor";
-import LiquidBackground from "./components/LiquidBackground";
-import CyberNetwork from "./components/CyberNetwork";
-import StatusWidget from "./components/StatusWidget";
 import PageLoader from "./components/PageLoader";
 import SmoothScroll from "./components/SmoothScroll";
+import { bg } from "./assets";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 
 const App = () => {
@@ -32,46 +29,40 @@ const App = () => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
   }, []);
 
-  // Force scroll to top exactly when the loader finishes and the site is revealed
-  useEffect(() => {
-    if (!isLoading) {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
-  }, [isLoading]);
+  // Called by the loader when its animation finishes
+  const handleLoaderDone = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    setIsLoading(false);
+  };
 
   return (
     <BrowserRouter>
-      <div className="relative z-0 bg-primary min-h-screen overflow-x-hidden">
+      {/* Set a consistent dark premium background for the entire app */}
+      <div className="relative z-0 bg-[#050507] min-h-screen overflow-x-hidden text-white">
+        
+        {/* Global Texture Background (bg.png) - Increased visibility */}
+        <div className="fixed inset-0 z-[9999] opacity-[0.15] pointer-events-none grayscale mix-blend-lighten">
+          <img src={bg} alt="" className="w-full h-full object-cover" />
+        </div>
+
         <AnimatePresence mode="wait">
-          {isLoading && <PageLoader key="loader" />}
+          {isLoading && <PageLoader key="loader" onDone={handleLoaderDone} />}
         </AnimatePresence>
 
         <div className={isLoading ? "hidden" : "block"}>
-          {/* Scroll Progress Indicator */}
+          {/* Scroll Progress Indicator - Updated to orange */}
           <motion.div
-            className="fixed top-0 left-0 right-0 h-1 bg-white origin-left z-[100]"
+            className="fixed top-0 left-0 right-0 h-[2px] bg-orange-500 origin-left z-[100] shadow-[0_0_10px_rgba(249,115,22,0.5)]"
             style={{ scaleX }}
           />
-          
-          <CustomCursor />
-          <LiquidBackground />
-          <div className="fixed inset-0 pointer-events-none z-[1] opacity-50">
-            <CyberNetwork />
-          </div>
-          <StatusWidget />
           
           <SmoothScroll>
             <div className="relative z-10">
               <Navbar />
               <Hero />
-              <Suspense fallback={<div className="h-20 bg-primary" />}>
+              <Suspense fallback={<div className="h-20 bg-[#050507]" />}>
                 <About />
                 <Experience />
                 <Tech />
