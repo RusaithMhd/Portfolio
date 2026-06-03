@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import rusaith from "./Rusaith.png";
 import rusaithHero from "./Rusaith_Hero_img.png";
+import rusaith2 from "./Rusaith2.png";
 import name from "./name.png";
 import backend from "./backend.png";
 import creator from "./creator.png";
@@ -56,4 +57,5 @@ export {
   tailwind,
   typescript,
   bg,
+  rusaith2,
 };

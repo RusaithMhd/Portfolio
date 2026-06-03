@@ -11,6 +11,7 @@ const navigationPaths = {
   projects: "projects",
   mediakit: "mediakit",
   contact: "contact",
+  blog: "/blog",
 };
 
 export const navLinks = [
@@ -29,6 +30,11 @@ export const navLinks = [
   {
     id: navigationPaths.mediakit,
     title: "Media Kit",
+  },
+  {
+    id: "blog",
+    title: "Blog",
+    path: "/blog",
   },
   {
     id: navigationPaths.contact,
@@ -64,6 +70,9 @@ const technologies = [
 
   // Orbit 2: Backend & Systems
   { name: "Odoo ERP", icon: "SiOdoo" },
+  { name: "Python", icon: "SiPython" },
+  { name: "PostgreSQL", icon: "SiPostgresql" },
+  { name: "XML", icon: "SiCode" },
   { name: "MySQL", icon: "SiMysql" },
   { name: "Git", icon: "SiGit" },
 

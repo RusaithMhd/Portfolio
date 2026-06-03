@@ -87,13 +87,30 @@ const Navbar = () => {
               key={link.id}
               className={`${active === link.title ? "text-orange-500" : "text-white/60"
                 } text-[13px] font-medium uppercase tracking-wider cursor-pointer hover:text-white transition-colors duration-300 relative group`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActive(link.title);
-                document.querySelector(`#${link.id}`)?.scrollIntoView({ behavior: 'smooth' });
-              }}
             >
-              <a href={`#${link.id}`}>{link.title}</a>
+              {link.path ? (
+                <Link 
+                  to={link.path}
+                  onClick={() => setActive(link.title)}
+                >
+                  {link.title}
+                </Link>
+              ) : (
+                <a 
+                  href={`#${link.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (window.location.pathname !== '/') {
+                      window.location.href = `/#${link.id}`;
+                    } else {
+                      setActive(link.title);
+                      document.querySelector(`#${link.id}`)?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  {link.title}
+                </a>
+              )}
               <span className={`absolute -bottom-1 left-0 h-[2px] bg-orange-500 transition-all duration-300 ${active === link.title ? "w-full" : "w-0 group-hover:w-full"}`} />
             </li>
           ))}
@@ -143,14 +160,36 @@ const Navbar = () => {
                     <li
                       key={link.id}
                       className={`${active === link.title ? "text-orange-500 pl-2 border-l-2 border-orange-500" : "text-white/60 hover:text-white pl-2 border-l-2 border-transparent"} text-[14px] font-medium uppercase tracking-widest cursor-pointer transition-all duration-300`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setActive(link.title);
-                        setToggle(!toggle);
-                        document.querySelector(`#${link.id}`)?.scrollIntoView({ behavior: 'smooth' });
-                      }}
                     >
-                      <a href={`#${link.id}`}>{link.title}</a>
+                      {link.path ? (
+                        <Link 
+                          to={link.path}
+                          onClick={() => {
+                            setActive(link.title);
+                            setToggle(!toggle);
+                          }}
+                          className="block w-full"
+                        >
+                          {link.title}
+                        </Link>
+                      ) : (
+                        <a 
+                          href={`#${link.id}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setToggle(!toggle);
+                            if (window.location.pathname !== '/') {
+                              window.location.href = `/#${link.id}`;
+                            } else {
+                              setActive(link.title);
+                              document.querySelector(`#${link.id}`)?.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }}
+                          className="block w-full"
+                        >
+                          {link.title}
+                        </a>
+                      )}
                     </li>
                   ))}
 

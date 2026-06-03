@@ -21,7 +21,7 @@ const Terminal = () => {
     about: personalInfo.about,
     projects: `I have ${projects.length} featured projects. Some include: ${projects.map(p => p.name).join(", ")}.`,
     contact: `Email: ${personalInfo.email} | LinkedIn: /in/rusaith | GitHub: @rusaith`,
-    skills: "React, JavaScript, Tailwind, Photoshop, Illustrator, Odoo ERP, IT Support",
+    skills: "React, JavaScript, Tailwind, Odoo ERP, Python, PostgreSQL, XML, Photoshop, Illustrator, IT Support",
     exp: `Currently Graphic Designer cum IT Executive at ChillFrost. Previously Web Developer at IMSS and Digital Marketing Asst at Food Champ.`,
     bio: `Currently working as a ${personalInfo.role}. Expert in bridging Graphic Design and Web Development.`,
     clear: "CLEAR",

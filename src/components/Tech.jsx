@@ -11,6 +11,9 @@ const techImages = {
   "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
   "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
   "Odoo ERP": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/odoo/odoo-original.svg",
+  "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
+  "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
+  "XML": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xml/xml-original.svg",
   "MySQL": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
   "Git": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
   "Photoshop": "https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg",
@@ -97,14 +100,14 @@ const Tech = () => {
         <CategorySection 
           title="Systems & Backend" 
           icon={FiDatabase} 
-          techs={technologies.slice(4, 7)} 
+          techs={technologies.slice(4, 10)} 
           startIndex={4}
         />
         <CategorySection 
           title="Design & 3D" 
           icon={FiBox} 
-          techs={technologies.slice(7)} 
-          startIndex={7}
+          techs={technologies.slice(10)} 
+          startIndex={10}
         />
       </div>
     </div>

@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "fra
 import { styles } from "../styles";
 import { rusaithHero } from "../assets";
 
-const roles = ["Frontend Engineer", "UI/UX Designer", "Creative Developer", "Problem Solver"];
+const roles = ["Odoo ERP Consultant", "Full Stack Developer", "Frontend Engineer", "UI/UX Designer"];
 
 const Hero = () => {
   const containerRef = useRef(null);
@@ -117,8 +117,8 @@ const Hero = () => {
             className="mb-6 lg:mb-8"
           >
             <h1 className="text-[1.6rem] xs:text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.1] text-white/90 drop-shadow-2xl">
-              Freelance <br className="hidden sm:block lg:block" />
-              <span className="font-semibold text-white">Web Developer & <span className="text-orange-500 italic">Graphic Designer</span> <span className="text-white/60 text-[10px] xs:text-xs sm:text-sm md:text-base block font-light tracking-[0.2em] mt-1.5 sm:mt-4 uppercase">in Sri Lanka</span></span>
+              Full Stack <br className="hidden sm:block lg:block" />
+              <span className="font-semibold text-white">Web Developer & <span className="text-orange-500 italic">Odoo ERP Consultant</span> <span className="text-white/60 text-[10px] xs:text-xs sm:text-sm md:text-base block font-light tracking-[0.2em] mt-1.5 sm:mt-4 uppercase">in Sri Lanka</span></span>
             </h1>
           </motion.div>
 
@@ -224,7 +224,7 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.4 }}
             className="text-white/60 text-[11px] xs:text-xs sm:text-sm md:text-base max-w-xs font-light leading-relaxed text-center lg:text-right"
           >
-            Merging high-end aesthetics with robust engineering to build immersive web experiences.
+            Merging high-end aesthetics with robust engineering to build immersive web experiences and powerful Odoo ERP solutions.
           </motion.p>
 
           <motion.div

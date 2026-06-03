@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 
@@ -12,6 +12,8 @@ const Works = lazy(() => import("./components/Works"));
 const MediaKit = lazy(() => import("./components/MediaKit"));
 const Testimonials = lazy(() => import("./components/Testimonials"));
 const Contact = lazy(() => import("./components/Contact"));
+const BlogListing = lazy(() => import("./components/BlogListing"));
+const BlogDetail = lazy(() => import("./components/BlogDetail"));
 import PageLoader from "./components/PageLoader";
 import SmoothScroll from "./components/SmoothScroll";
 import SEOManager from "./components/SEOManager";
@@ -63,19 +65,35 @@ const App = () => {
           <SmoothScroll>
             <div className="relative z-10">
               <Navbar />
-              <Hero />
-              <Suspense fallback={<div className="h-20 bg-[#050507]" />}>
-                <About />
-                <Services />
-                <Experience />
-                <Tech />
-                <Works />
-                <MediaKit />
-                {/* <Testimonials /> */}
-                <div className="relative z-0">
-                  <Contact />
-                </div>
-              </Suspense>
+              <Routes>
+                <Route path="/" element={
+                  <>
+                    <Hero />
+                    <Suspense fallback={<div className="h-20 bg-[#050507]" />}>
+                      <About />
+                      <Services />
+                      <Experience />
+                      <Tech />
+                      <Works />
+                      <MediaKit />
+                      {/* <Testimonials /> */}
+                      <div className="relative z-0">
+                        <Contact />
+                      </div>
+                    </Suspense>
+                  </>
+                } />
+                <Route path="/blog" element={
+                  <Suspense fallback={<div className="min-h-screen bg-[#050507]" />}>
+                    <BlogListing />
+                  </Suspense>
+                } />
+                <Route path="/blog/:slug" element={
+                  <Suspense fallback={<div className="min-h-screen bg-[#050507]" />}>
+                    <BlogDetail />
+                  </Suspense>
+                } />
+              </Routes>
             </div>
           </SmoothScroll>
         </div>

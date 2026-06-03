@@ -29,8 +29,8 @@ const seoConfig = {
   }
 };
 
-export const updateSEOMetadata = (path) => {
-  const meta = seoConfig[path] || seoConfig["/"];
+export const updateSEOMetadata = (path, customMeta = null) => {
+  const meta = customMeta || seoConfig[path] || seoConfig["/"];
   
   // Update Title
   document.title = meta.title;
