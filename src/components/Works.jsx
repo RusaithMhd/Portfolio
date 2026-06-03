@@ -20,8 +20,9 @@ const Works = () => {
             <p className="text-[12px] uppercase tracking-[0.3em] text-orange-500/80 font-medium">Selected Portfolio</p>
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white">
-            Featured <span className="font-semibold text-orange-500 italic">Projects</span>
+            Design & Development <span className="font-semibold text-orange-500 italic">Portfolio</span>
           </h2>
+          <h1 className="sr-only">Design & Development Portfolio</h1>
         </div>
         
         <div className="hidden md:flex flex-col items-end gap-1 mb-4">

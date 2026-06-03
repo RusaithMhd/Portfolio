@@ -67,7 +67,7 @@ const About = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-[#050507] via-transparent to-transparent z-10" />
       <img
         src={rusaith}
-        alt="Rusaith Portrait"
+        alt="MIM Rusaith — Freelance Web Developer and Graphic Designer based in Colombo, Sri Lanka"
         className="w-full h-full object-contain object-bottom grayscale-[0.4] brightness-90 contrast-110 transition-all duration-1000"
       />
     </motion.div>
@@ -75,6 +75,20 @@ const About = () => {
 
   return (
     <div className="relative w-full">
+      {/* Dynamic Parallax Background Texture for About section */}
+      <motion.div
+        style={{ y: backgroundY }}
+        className="absolute -inset-x-6 sm:-inset-x-16 -inset-y-10 sm:-inset-y-16 -z-10 pointer-events-none opacity-80 overflow-hidden"
+      >
+        <img
+          src={bg}
+          alt=""
+          className="w-full h-full object-cover select-none filter brightness-50"
+        />
+        {/* Cinematic gradient overlay to keep text extremely readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050507]/90 via-[#050507]/50 to-[#050507]" />
+      </motion.div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start relative z-10">
 
         {/* Text Content Column */}
@@ -85,9 +99,10 @@ const About = () => {
               <p className="text-[12px] uppercase tracking-[0.3em] text-orange-500/80 font-medium">Introduction</p>
             </div>
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.1] text-white">
-              The Visionary <br />
-              <span className="font-semibold italic">Behind the Work</span>
+              About MIM Rusaith — <br />
+              <span className="font-semibold italic text-orange-500">Developer & Designer, Colombo</span>
             </h2>
+            <h1 className="sr-only">About MIM Rusaith — Full Stack Developer & Designer in Sri Lanka</h1>
           </motion.div>
 
           <motion.div

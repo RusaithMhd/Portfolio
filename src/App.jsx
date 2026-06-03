@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 
 // Lazy Loaded Components for Code Splitting (Reduces Initial Load Time)
 const About = lazy(() => import("./components/About"));
+const Services = lazy(() => import("./components/Services"));
 const Experience = lazy(() => import("./components/Experience"));
 const Tech = lazy(() => import("./components/Tech"));
 const Works = lazy(() => import("./components/Works"));
@@ -13,6 +14,7 @@ const Testimonials = lazy(() => import("./components/Testimonials"));
 const Contact = lazy(() => import("./components/Contact"));
 import PageLoader from "./components/PageLoader";
 import SmoothScroll from "./components/SmoothScroll";
+import SEOManager from "./components/SEOManager";
 import { bg } from "./assets";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 
@@ -39,13 +41,13 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      {/* Dynamic SEO & URL Path Sync Manager */}
+      <SEOManager isLoading={isLoading} />
+
       {/* Set a consistent dark premium background for the entire app */}
       <div className="relative z-0 bg-[#050507] min-h-screen overflow-x-hidden text-white">
         
-        {/* Global Texture Background (bg.png) - Increased visibility */}
-        <div className="fixed inset-0 z-[9999] opacity-[0.15] pointer-events-none grayscale mix-blend-lighten">
-          <img src={bg} alt="" className="w-full h-full object-cover" />
-        </div>
+
 
         <AnimatePresence mode="wait">
           {isLoading && <PageLoader key="loader" onDone={handleLoaderDone} />}
@@ -64,6 +66,7 @@ const App = () => {
               <Hero />
               <Suspense fallback={<div className="h-20 bg-[#050507]" />}>
                 <About />
+                <Services />
                 <Experience />
                 <Tech />
                 <Works />

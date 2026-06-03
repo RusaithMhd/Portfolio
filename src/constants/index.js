@@ -6,6 +6,7 @@ import {
 const navigationPaths = {
   home: "/",
   about: "about",
+  services: "services",
   experience: "experience",
   projects: "projects",
   mediakit: "mediakit",
@@ -16,6 +17,10 @@ export const navLinks = [
   {
     id: navigationPaths.about,
     title: "About",
+  },
+  {
+    id: navigationPaths.services,
+    title: "Solutions",
   },
   {
     id: navigationPaths.projects,

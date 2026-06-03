@@ -58,7 +58,7 @@ const Hero = () => {
     <section
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full h-[100svh] min-h-[700px] lg:min-h-[800px] overflow-hidden bg-[#050507] text-white flex items-center justify-center"
+      className="relative w-full h-[100svh] min-h-[580px] xs:min-h-[700px] lg:min-h-[800px] overflow-hidden bg-[#050507] text-white flex items-center justify-center"
       style={{ perspective: "1200px" }}
     >
       {/* 1. Deep Background Layer (Now containing the portrait) */}
@@ -74,7 +74,7 @@ const Hero = () => {
         <div className="absolute inset-0 w-full h-full">
           <img
             src={rusaithHero}
-            alt="Rusaith Portrait"
+            alt="MIM Rusaith — Freelance Web Developer and Graphic Designer based in Colombo, Sri Lanka"
             className="w-full h-full object-cover object-[center_top] sm:object-center hero-portrait"
           />
           {/* Gradients to darken ONLY the edges for text readability, leaving the center clear */}
@@ -94,7 +94,7 @@ const Hero = () => {
       </motion.div>
 
       {/* 2. Main Content Container */}
-      <div className={`relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row items-center lg:items-center justify-center lg:justify-between h-full pt-32 lg:pt-0 pb-20 lg:pb-0`}>
+      <div className={`relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row items-center lg:items-center justify-center lg:justify-between h-full pt-20 xs:pt-32 lg:pt-0 pb-10 xs:pb-20 lg:pb-0`}>
 
         {/* LEFT SIDE: Headline Content */}
         {/* LEFT SIDE: Headline & Stats */}
@@ -107,7 +107,7 @@ const Hero = () => {
             z: textZ,
             transformPerspective: 1200
           }}
-          className="w-full lg:w-[35%] flex flex-col items-center lg:items-start text-center lg:text-left origin-center lg:origin-bottom mb-12 lg:mb-0"
+          className="w-full lg:w-[35%] flex flex-col items-center lg:items-start text-center lg:text-left origin-center lg:origin-bottom mb-6 xs:mb-12 lg:mb-0"
         >
           {/* Headline */}
           <motion.div
@@ -116,9 +116,9 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6 lg:mb-8"
           >
-            <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.1] text-white/90 drop-shadow-2xl">
-              Crafting <br className="hidden sm:block lg:block" />
-              <span className="font-semibold text-white">Digital <span className="text-orange-500 italic">Excellence</span></span>
+            <h1 className="text-[1.6rem] xs:text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.1] text-white/90 drop-shadow-2xl">
+              Freelance <br className="hidden sm:block lg:block" />
+              <span className="font-semibold text-white">Web Developer & <span className="text-orange-500 italic">Graphic Designer</span> <span className="text-white/60 text-[10px] xs:text-xs sm:text-sm md:text-base block font-light tracking-[0.2em] mt-1.5 sm:mt-4 uppercase">in Sri Lanka</span></span>
             </h1>
           </motion.div>
 
@@ -154,17 +154,17 @@ const Hero = () => {
             z: textZ,
             transformPerspective: 1200
           }}
-          className="w-full lg:w-[35%] flex flex-col items-center lg:items-end text-center lg:text-right justify-center gap-8 lg:gap-10 origin-center lg:origin-bottom"
+          className="w-full lg:w-[35%] flex flex-col items-center lg:items-end text-center lg:text-right justify-center gap-4 xs:gap-8 lg:gap-10 origin-center lg:origin-bottom"
         >
           {/* Status HUD (Badge) */}
           <motion.div
-            className="hero-stat-card px-5 py-3 rounded-2xl flex items-center gap-3 shadow-2xl bg-[#050507]/40 backdrop-blur-xl border-orange-500/20"
+            className="hero-stat-card px-4 py-2 xs:px-5 xs:py-3 rounded-2xl flex items-center gap-3 shadow-2xl bg-[#050507]/40 backdrop-blur-xl border-orange-500/20"
           >
             <div className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
             </div>
-            <span className="text-[10px] font-medium tracking-widest text-orange-500/90 uppercase">Available for Work</span>
+            <span className="text-[9px] xs:text-[10px] font-medium tracking-widest text-orange-500/90 uppercase">Available for Work</span>
           </motion.div>
 
           {/* Reflective Name Display */}
@@ -175,7 +175,7 @@ const Hero = () => {
               transition={{ duration: 1, delay: 0.2 }}
               className="relative inline-block"
             >
-              <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white relative z-10 select-none">
+              <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white relative z-10 select-none">
                 <span className="relative inline-block group-hover:animate-crack-1">R</span>
                 <span className="relative inline-block group-hover:animate-crack-2">U</span>
                 <span className="relative inline-block group-hover:animate-crack-3">S</span>
@@ -186,7 +186,7 @@ const Hero = () => {
               </h2>
 
               <div className="absolute top-[80%] left-0 w-full opacity-20 scale-y-[-1] blur-[2px] select-none pointer-events-none text-center lg:text-right">
-                <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent">
+                <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent">
                   RUSAITH
                 </h2>
               </div>
@@ -198,10 +198,10 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="h-[40px] flex items-center justify-center lg:justify-end overflow-hidden"
+            className="h-[30px] xs:h-[40px] flex items-center justify-center lg:justify-end overflow-hidden"
           >
             <div className="flex items-center gap-3">
-              <span className="text-white/60 text-base md:text-lg lg:text-xl font-light">I am a</span>
+              <span className="text-white/60 text-sm xs:text-base md:text-lg lg:text-xl font-light">I am a</span>
               <AnimatePresence mode="wait">
                 <motion.span
                   key={roles[roleIndex]}
@@ -209,7 +209,7 @@ const Hero = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="text-base md:text-lg lg:text-xl xl:text-2xl font-medium tracking-wide text-orange-500"
+                  className="text-sm xs:text-base md:text-lg lg:text-xl xl:text-2xl font-medium tracking-wide text-orange-500"
                 >
                   {roles[roleIndex]}
                 </motion.span>
@@ -222,21 +222,20 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="text-white/60 text-xs sm:text-sm md:text-base max-w-xs font-light leading-relaxed text-center lg:text-right"
+            className="text-white/60 text-[11px] xs:text-xs sm:text-sm md:text-base max-w-xs font-light leading-relaxed text-center lg:text-right"
           >
             Merging high-end aesthetics with robust engineering to build immersive web experiences.
           </motion.p>
 
-          {/* Call to Actions */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center lg:justify-end"
+            className="flex flex-row gap-3 w-full justify-center lg:justify-end"
           >
             <button
               onClick={() => document.getElementById("projects").scrollIntoView({ behavior: "smooth" })}
-              className="group relative px-8 py-3.5 bg-white text-black rounded-full overflow-hidden transition-all hover:scale-[1.05] active:scale-95 flex items-center justify-center gap-2 shadow-2xl whitespace-nowrap text-sm font-bold"
+              className="group relative flex-1 xs:flex-none px-4 py-2.5 xs:px-8 xs:py-3.5 bg-white text-black rounded-full overflow-hidden transition-all hover:scale-[1.05] active:scale-95 flex items-center justify-center gap-2 shadow-2xl whitespace-nowrap text-[11px] xs:text-sm font-bold"
             >
               <span className="relative z-10 tracking-wide group-hover:text-orange-600 transition-colors">View Projects</span>
               <div className="absolute inset-0 bg-orange-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0 opacity-10" />
@@ -244,7 +243,7 @@ const Hero = () => {
 
             <button
               onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
-              className="px-8 py-3.5 hero-badge rounded-full hover:bg-orange-500/10 transition-all font-bold tracking-wide text-white/90 backdrop-blur-md bg-white/5 border-white/10 hover:border-orange-500/40 whitespace-nowrap text-sm"
+              className="flex-1 xs:flex-none px-4 py-2.5 xs:px-8 xs:py-3.5 hero-badge rounded-full hover:bg-orange-500/10 transition-all font-bold tracking-wide text-white/90 backdrop-blur-md bg-white/5 border-white/10 hover:border-orange-500/40 whitespace-nowrap text-[11px] xs:text-sm text-center"
             >
               Let's Connect
             </button>

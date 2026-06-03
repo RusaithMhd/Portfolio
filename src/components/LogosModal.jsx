@@ -44,14 +44,14 @@ const categories = [
     label: "Logos",
     count: 8,
     items: [
-      { src: aqsaLogo, alt: "Aqsa Motors Logo", type: "Automotive", removeBg: false },
-      { src: fcLogo, alt: "FC Logo", type: "Brand Identity", removeBg: false },
-      { src: scLogo, alt: "SC Logo", type: "Brand Identity", removeBg: false },
-      { src: abeeLogo, alt: "Abee White Logo", type: "Corporate", removeBg: false },
-      { src: alaanaLogo, alt: "Alaana Distributor", type: "Distributor Brand", removeBg: false },
-      { src: karangkalLogo, alt: "Karangkal", type: "Brand Identity", removeBg: false },
-      { src: mlbLogo, alt: "MLB Transport", type: "Transport Brand", removeBg: false },
-      { src: standardLogo, alt: "MLB Stationery", type: "Stationery Brand", removeBg: false },
+      { src: aqsaLogo, alt: "Aqsa Motors brand logo design by Rusaith — graphic designer Colombo Sri Lanka", type: "Automotive", removeBg: false },
+      { src: fcLogo, alt: "FC food industry branding and logo designed by MIM Rusaith", type: "Brand Identity", removeBg: false },
+      { src: scLogo, alt: "SC corporate brand logo design by Rusaith — freelance designer Colombo", type: "Brand Identity", removeBg: false },
+      { src: abeeLogo, alt: "Abee premium white minimal logo design by MIM Rusaith", type: "Corporate", removeBg: false },
+      { src: alaanaLogo, alt: "Alaana Distributor brand logo design by Rusaith, Sri Lanka", type: "Distributor Brand", removeBg: false },
+      { src: karangkalLogo, alt: "Karangkal brand logo designed by Rusaith — graphic designer Colombo", type: "Brand Identity", removeBg: false },
+      { src: mlbLogo, alt: "MLB Transport logistics corporate logo design by Rusaith", type: "Transport Brand", removeBg: false },
+      { src: standardLogo, alt: "MLB Stationery corporate logo brand kit designed by Rusaith", type: "Stationery Brand", removeBg: false },
     ],
   },
   {
@@ -59,8 +59,8 @@ const categories = [
     label: "Branding",
     count: 2,
     items: [
-      { src: brandingMock, alt: "Infinity Allianze Mock", type: "Brand Mockup", removeBg: false },
-      { src: brandingPresentation, alt: "Infinity Allianze Presentation", type: "Brand Presentation", removeBg: false },
+      { src: brandingMock, alt: "Infinity Allianze brand logo mockup design by Rusaith", type: "Brand Mockup", removeBg: false },
+      { src: brandingPresentation, alt: "Infinity Allianze brand identity presentation by MIM Rusaith", type: "Brand Presentation", removeBg: false },
     ],
   },
   {
@@ -68,11 +68,11 @@ const categories = [
     label: "Posters",
     count: 5,
     items: [
-      { src: posterBottle, alt: "Bottle Sale Poster", type: "Product Ad", removeBg: false },
-      { src: posterChest, alt: "Chest Sling Bag", type: "Product Ad", removeBg: false },
-      { src: posterLaptop, alt: "Laptop Bag Poster", type: "Product Ad", removeBg: false },
-      { src: posterTravel, alt: "Travelling Bag Poster", type: "Product Ad", removeBg: false },
-      { src: posterSide, alt: "Side Bag Poster", type: "Product Ad", removeBg: false },
+      { src: posterBottle, alt: "Bottle sale promotional poster designed by MIM Rusaith", type: "Product Ad", removeBg: false },
+      { src: posterChest, alt: "Chest sling bag advertising poster by Rusaith — designer Colombo", type: "Product Ad", removeBg: false },
+      { src: posterLaptop, alt: "Laptop bag commercial poster designed by MIM Rusaith", type: "Product Ad", removeBg: false },
+      { src: posterTravel, alt: "Travelling bag travel gear poster design by Rusaith, Sri Lanka", type: "Product Ad", removeBg: false },
+      { src: posterSide, alt: "Side bag product poster design by Rusaith — graphic designer Colombo", type: "Product Ad", removeBg: false },
     ],
   },
   {
@@ -80,9 +80,9 @@ const categories = [
     label: "Invitations",
     count: 3,
     items: [
-      { src: inviteWedding, alt: "E-Wedding Invitation", type: "Wedding", removeBg: false },
-      { src: inviteCard, alt: "Invitation Card", type: "Card", removeBg: false },
-      { src: inviteRamadan, alt: "Ramadan Invitation", type: "Seasonal", removeBg: false },
+      { src: inviteWedding, alt: "E-Wedding digital invitation card designed by MIM Rusaith", type: "Wedding", removeBg: false },
+      { src: inviteCard, alt: "Creative greeting and invitation card designed by Rusaith", type: "Card", removeBg: false },
+      { src: inviteRamadan, alt: "Ramadan Mubarak seasonal invitation card designed by MIM Rusaith", type: "Seasonal", removeBg: false },
     ],
   },
   {
@@ -90,8 +90,8 @@ const categories = [
     label: "Menu",
     count: 2,
     items: [
-      { src: menu1, alt: "Menu Design 01", type: "Food & Beverage", removeBg: false },
-      { src: menu2, alt: "Menu Design 02", type: "Food & Beverage", removeBg: false },
+      { src: menu1, alt: "Restaurant menu card design by Rusaith — graphic designer Colombo", type: "Food & Beverage", removeBg: false },
+      { src: menu2, alt: "Food and beverage menu brochure designed by MIM Rusaith", type: "Food & Beverage", removeBg: false },
     ],
   },
 ];

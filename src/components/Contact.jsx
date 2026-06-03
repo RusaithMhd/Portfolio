@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import SectionWrapper from "../hoc/SectionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import { slideIn, fadeIn, textVariant } from "../utils/motion";
@@ -44,6 +44,21 @@ const Contact = () => {
     email: "",
     message: "",
   });
+
+  // Listen to dynamic Inquiry events to auto-populate service values
+  useEffect(() => {
+    const handleInquiry = (e) => {
+      const serviceName = e.detail?.service;
+      if (serviceName) {
+        setForm((prev) => ({
+          ...prev,
+          message: `Hi Rusaith, I'm interested in inquiring about your "${serviceName}" services. Let's collaborate on this!`,
+        }));
+      }
+    };
+    window.addEventListener("inquire-service", handleInquiry);
+    return () => window.removeEventListener("inquire-service", handleInquiry);
+  }, []);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState({
     title: "",
@@ -73,24 +88,27 @@ const Contact = () => {
       return;
     }
 
-    setTimeout(() => {
-      const whatsappMessage = `
-*Hello Mr. Rusaith I found You in your Portfolio*
+    const whatsappMessage = `*Hello Mr. Rusaith I found You in your Portfolio*
 *I want to contact you !!!*
    
-    *Name:*    ${form.name}
-    *Email:*   ${form.email}
-    *Message:* ${form.message}
+*Name:* ${form.name}
+*Email:* ${form.email}
+*Message:* ${form.message}
 
-Reply Soon as Possible :)
-  `;
-      const encodedMessage = encodeURIComponent(whatsappMessage);
-      const whatsappUrl = `https://wa.me/94770802365?text=${encodedMessage}`;
+Reply Soon as Possible :)`;
+
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    const whatsappUrl = `https://wa.me/94770802365?text=${encodedMessage}`;
+
+    // Direct synchronous execution to bypass mobile popup blockers
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      window.location.href = whatsappUrl;
+    } else {
       window.open(whatsappUrl, "_blank");
+    }
 
-      setForm({ name: "", email: "", message: "" });
-      setIsSubmitting(false);
-    }, 1500);
+    setForm({ name: "", email: "", message: "" });
+    setIsSubmitting(false);
   };
 
   return (
@@ -99,8 +117,9 @@ Reply Soon as Possible :)
       <motion.div variants={textVariant()} className="flex flex-col items-center md:items-start text-center md:text-left">
         <p className="text-[12px] uppercase tracking-[0.3em] text-orange-500/80 font-medium mb-4">Let's Connect</p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white">
-          Get in <span className="font-semibold text-orange-500 italic">Touch</span>
+          Let's Work <span className="font-semibold text-orange-500 italic">Together</span>
         </h2>
+        <h1 className="sr-only">Hire a Freelance Developer & Designer in Sri Lanka</h1>
       </motion.div>
 
       <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">

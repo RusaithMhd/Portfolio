@@ -14,12 +14,12 @@ import mlbLogo from "../assets/Works/freelance-logo/mlb-02.png";
 import standardLogo from "../assets/Works/freelance-logo/logo.png";
 
 const freelanceLogos = [
-  { src: aqsaLogo, alt: "Aqsa Motors Logo", removeWhiteBg: true },
-  { src: fcLogo, alt: "FC Logo", removeWhiteBg: false },
-  { src: scLogo, alt: "SC Logo", removeWhiteBg: false },
-  { src: abeeLogo, alt: "Abee Logo", removeWhiteBg: false },
-  { src: mlbLogo, alt: "MLB Logo", removeWhiteBg: false },
-  { src: standardLogo, alt: "Standard Logo", removeWhiteBg: false },
+  { src: aqsaLogo, alt: "Aqsa Motors brand logo design by Rusaith — graphic designer Colombo Sri Lanka", removeWhiteBg: true },
+  { src: fcLogo, alt: "FC food industry branding and logo designed by MIM Rusaith", removeWhiteBg: false },
+  { src: scLogo, alt: "SC corporate brand logo design by Rusaith — freelance designer Colombo Sri Lanka", removeWhiteBg: false },
+  { src: abeeLogo, alt: "Abee premium white minimal logo design by MIM Rusaith", removeWhiteBg: false },
+  { src: mlbLogo, alt: "MLB modern typography logo designed by Rusaith, Sri Lanka", removeWhiteBg: false },
+  { src: standardLogo, alt: "Standard luxury logo design by Rusaith — graphic designer Colombo Sri Lanka", removeWhiteBg: false },
 ];
 
 const FreelanceGallery = () => {
